@@ -15,14 +15,15 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-# 2. Enterprise Government MLOps Theme (tourism.gov.kh Identity)
+# 2. Enterprise Government MLOps Theme (Clean & Responsive)
 st.markdown(
     """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
     
     * { 
-        font-family: 'Plus Jakarta Sans', 'Kantumruy Pro', sans-serif; 
+        font-family: 'Plus Jakarta Sans';
+        
     }
     
     code, pre, .mono {
@@ -30,116 +31,40 @@ st.markdown(
     }
     
     .block-container { 
-        /* Keep the first app row below Streamlit's fixed toolbar. */
-        padding: 4.5rem 2rem 2.5rem 2rem; 
+        padding: 1.5rem 1.5rem 2.5rem 1.5rem; 
         max-width: 100%; 
     }
 
-    /* Keep the wide header usable when the browser window is resized. */
-    [data-testid="stHorizontalBlock"] {
-        min-width: 0;
-    }
-
-    [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
-        min-width: 0;
-    }
-
-    [data-testid="stRadio"] > div {
-        gap: 0.35rem;
-        flex-wrap: wrap;
-    }
-
-    [data-testid="stRadio"] label {
-        white-space: normal;
-        line-height: 1.25;
-    }
-
-    @media (max-width: 1200px) {
-        .block-container {
-            padding-left: 1.25rem;
-            padding-right: 1.25rem;
-        }
-
-        [data-testid="stRadio"] label {
-            font-size: 0.85rem;
-        }
-    }
-
-    @media (max-width: 900px) {
-        .block-container {
-            padding-top: 4rem;
-        }
-
-        .gov-navbar {
-            align-items: flex-start;
-        }
-
-        .gov-title-khmer {
-            font-size: 0.95rem;
-        }
-
-        .gov-title-en {
-            font-size: 0.62rem;
-            letter-spacing: 0.08em;
-        }
-    }
-
-    @media (max-width: 640px) {
-        .block-container {
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
-        }
-
-        .gov-navbar {
-            padding: 0.5rem 0;
-        }
-
-        .gov-logo-img {
-            width: 38px;
-            height: 38px;
-        }
-
-        .gov-brand {
-            gap: 0.55rem;
-        }
-
-        .gov-title-khmer {
-            font-size: 0.78rem;
-        }
-
-        .gov-title-en {
-            font-size: 0.5rem;
-        }
-
-        .mot-hero {
-            padding: 2rem 1.25rem;
-        }
-
-        .mot-hero-title {
-            font-size: 1.55rem;
-        }
-    }
-    
-    /* Government Header */
+    /* Government Header Bar */
     .gov-navbar {
         display: flex;
-        justify-content: space-between;
+        flex-direction: row;
         align-items: center;
-        padding: 0.8rem 0;
+        justify-content: space-between;
+        padding-bottom: 0.8rem;
         border-bottom: 2px solid #e2e8f0;
-        margin-bottom: 1.2rem;
+        margin-bottom: 1rem;
+        gap: 1rem;
+        flex-wrap: wrap;
     }
     
     .gov-brand {
         display: flex;
         align-items: center;
-        gap: 0.9rem;
+        gap: 0.8rem;
     }
     
-    .gov-logo-img {
-        width: 48px;
-        height: 48px;
-        object-fit: contain;
+    .gov-emblem-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        background: #1e3a8a;
+        color: #facc15;
+        font-size: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(30, 58, 138, 0.25);
     }
     
     .gov-titles {
@@ -148,75 +73,75 @@ st.markdown(
     }
     
     .gov-title-khmer {
-        font-size: 1.15rem;
+        font-size: 1.1rem;
         font-weight: 700;
         color: #1e3a8a;
-        line-height: 1.2;
+        line-height: 1.25;
     }
     
     .gov-title-en {
-        font-size: 0.72rem;
+        font-size: 0.7rem;
         font-weight: 700;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.08em;
         color: #64748b;
         text-transform: uppercase;
     }
     
-    .mlops-badge {
-        background: #0f172a;
-        color: #38bdf8;
+    .mlops-status-pill {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
         padding: 4px 10px;
-        border-radius: 6px;
+        border-radius: 9999px;
         font-size: 0.72rem;
         font-weight: 700;
         font-family: 'JetBrains Mono', monospace;
-        border: 1px solid #1e293b;
+        color: #334155;
     }
 
-    /* Hero Banner with Tourism Identity */
+    /* Hero Banner with Angkor Backdrop */
     .mot-hero {
         position: relative;
-        border-radius: 18px;
-        padding: 3.5rem 2.5rem;
+        border-radius: 16px;
+        padding: 2.5rem 1.8rem;
         color: white;
-        margin-bottom: 2rem;
-        background: linear-gradient(180deg, rgba(15, 23, 42, 0.55) 0%, rgba(15, 23, 42, 0.88) 100%),
+        margin-bottom: 1.5rem;
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.9) 100%),
                     url('https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=1600&auto=format&fit=crop');
         background-size: cover;
         background-position: center;
-        box-shadow: 0 12px 30px -5px rgba(15, 23, 42, 0.25);
+        box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.2);
     }
     
     .mot-hero-sub {
-        font-size: 0.95rem;
+        font-size: 0.85rem;
         font-weight: 600;
         color: #93c5fd;
-        margin-bottom: 0.3rem;
+        margin-bottom: 0.25rem;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.06em;
     }
     
     .mot-hero-title {
-        font-size: 2.3rem;
+        font-size: 1.85rem;
         font-weight: 800;
         color: #facc15;
-        line-height: 1.25;
-        margin-bottom: 0.8rem;
+        line-height: 1.3;
+        margin-bottom: 0.6rem;
     }
     
     .mot-hero-desc {
-        font-size: 0.95rem;
+        font-size: 0.88rem;
         color: #e2e8f0;
-        max-width: 850px;
-        line-height: 1.6;
+        max-width: 820px;
+        line-height: 1.55;
     }
 
     /* Section Headings with Gold Underline */
     .mot-section-header {
-        font-size: 1.25rem;
+        font-size: 1.2rem;
         font-weight: 800;
         color: #1e3a8a;
-        margin: 1.5rem 0 1rem 0;
+        margin: 1.2rem 0 0.8rem 0;
         display: inline-block;
         position: relative;
     }
@@ -224,8 +149,8 @@ st.markdown(
     .mot-section-header::after {
         content: "";
         display: block;
-        width: 42px;
-        height: 3.5px;
+        width: 38px;
+        height: 3px;
         background: #d97706;
         border-radius: 2px;
         margin-top: 4px;
@@ -236,41 +161,67 @@ st.markdown(
         background: white;
         border: 1px solid #e2e8f0;
         border-radius: 12px;
-        padding: 1.2rem;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        padding: 1.1rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.03);
         border-top: 3.5px solid #1e3a8a;
+        margin-bottom: 0.75rem;
     }
     
     .ds-card-title {
-        font-size: 0.85rem;
+        font-size: 0.78rem;
         font-weight: 700;
         color: #64748b;
         text-transform: uppercase;
-        margin-bottom: 0.4rem;
+        margin-bottom: 0.3rem;
     }
     
     .ds-card-val {
-        font-size: 1.6rem;
+        font-size: 1.45rem;
         font-weight: 800;
         color: #0f172a;
         font-family: 'JetBrains Mono', monospace;
     }
     
     .ds-card-sub {
-        font-size: 0.75rem;
+        font-size: 0.74rem;
         color: #059669;
         font-weight: 600;
         margin-top: 0.2rem;
     }
 
+    /* Mobile Responsive Optimizations */
+    @media (max-width: 768px) {
+        .block-container {
+            padding: 1rem 0.8rem 2rem 0.8rem !important;
+        }
+        .gov-navbar {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        .mot-hero {
+            padding: 1.6rem 1.1rem !important;
+            border-radius: 12px;
+        }
+        .mot-hero-title {
+            font-size: 1.35rem !important;
+        }
+        .mot-hero-desc {
+            font-size: 0.8rem !important;
+        }
+        .ds-card-val {
+            font-size: 1.25rem !important;
+        }
+    }
+
     /* Footer */
     .gov-footer {
         border-top: 1px solid #e2e8f0;
-        padding: 2rem 0;
-        margin-top: 3.5rem;
+        padding: 1.8rem 0;
+        margin-top: 3rem;
         text-align: center;
         color: #64748b;
-        font-size: 0.82rem;
+        font-size: 0.8rem;
         line-height: 1.6;
     }
 </style>
@@ -355,42 +306,44 @@ try:
 except Exception:
     api_online = False
 
-# 5. Top Header Navigation
-col_header, col_nav = st.columns([1.3, 2])
-with col_header:
-    st.markdown(
-        f"""
-        <div class="gov-navbar">
-            <div class="gov-brand">
-                <img class="gov-logo-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Emblem_of_Cambodia.svg/200px-Emblem_of_Cambodia.svg.png" alt="Cambodia Emblem">
-                <div class="gov-titles">
-                    <div class="gov-title-khmer">ក្រសួងទេសចរណ៍ • នាយកដ្ឋានស្ថិតិ និងផែនការ</div>
-                    <div class="gov-title-en">DECISION SUPPORT SYSTEM • MACHINE LEARNING OPERATIONS</div>
-                </div>
+# 5. Top Header (Stacked & Mobile-Clean)
+api_tag = "API: LIVE (Port 8000)" if api_online else "API: FALLBACK MODE"
+st.markdown(
+    f"""
+    <div class="gov-navbar">
+        <div class="gov-brand">
+            <div class="gov-emblem-badge">🇰🇭</div>
+            <div class="gov-titles">
+                <div class="gov-title-khmer">ក្រសួងទេសចរណ៍ • នាយកដ្ឋានស្ថិតិ និងផែនការ</div>
+                <div class="gov-title-en">TOURISM INTELLIGENCE PLATFORM • APPLIED MLOps</div>
             </div>
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
+        <div class="mlops-status-pill">{api_tag}</div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
-with col_nav:
-    current_tab = st.radio(
-        "Navigation",
-        options=[
-            "📊 Executive KPIs & Model Health",
-            "📈 Holdout Evaluation & Inferences",
-            "🚨 Anomaly & Early Warning Matrix",
-            "⚙️ Policy Simulation Sandbox",
-            "📚 Data Architecture & Lineage",
-        ],
-        horizontal=True,
-        label_visibility="collapsed",
-    )
+# Responsive Navigation Bar
+nav_options = [
+    "📊 Executive KPIs & Health",
+    "📈 Forecast Curves & Residuals",
+    "🚨 Early Warning & Action Matrix",
+    "⚙️ Policy Simulation Sandbox",
+    "📚 Data Lineage & Pipeline Architecture",
+]
+
+current_tab = st.selectbox(
+    "Select Platform Module",
+    options=nav_options,
+    index=0,
+    label_visibility="collapsed",
+)
 
 # -------------------------------------------------------------------
 # TAB 1: EXECUTIVE KPIS & MODEL HEALTH
 # -------------------------------------------------------------------
-if current_tab == "📊 Executive KPIs & Model Health":
+if current_tab == "📊 Executive KPIs & Health":
     st.markdown(
         """
         <div class="mot-hero">
@@ -410,7 +363,7 @@ if current_tab == "📊 Executive KPIs & Model Health":
     m1, m2, m3, m4 = st.columns(4)
     with m1:
         st.markdown(
-            f"""
+            """
             <div class="ds-card">
                 <div class="ds-card-title">Production Model</div>
                 <div class="ds-card-val">LightGBM</div>
@@ -442,14 +395,14 @@ if current_tab == "📊 Executive KPIs & Model Health":
             unsafe_allow_html=True,
         )
     with m4:
-        status_text = "LIVE (Port 8000)" if api_online else "OFFLINE (Fallback)"
-        status_color = "#059669" if api_online else "#dc2626"
+        status_text = "LIVE (:8000)" if api_online else "FALLBACK (CSV)"
+        status_color = "#059669" if api_online else "#d97706"
         st.markdown(
             f"""
             <div class="ds-card">
                 <div class="ds-card-title">FastAPI Microservice</div>
-                <div class="ds-card-val" style="color: {status_color}; font-size: 1.1rem; padding-top: 6px;">{status_text}</div>
-                <div class="ds-card-sub">Dockerized PostgreSQL :5432</div>
+                <div class="ds-card-val" style="color: {status_color}; font-size: 1.25rem;">{status_text}</div>
+                <div class="ds-card-sub">PostgreSQL Container :5432</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -459,18 +412,18 @@ if current_tab == "📊 Executive KPIs & Model Health":
     st.markdown("<div class='mot-section-header'>សូចនាករព្យាករណ៍ទូទាំងប្រទេស • 12-Month Projected Volume Summary</div>", unsafe_allow_html=True)
 
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Cumulative Projected Inbound", f"{forecast_df['Tuned_Forecast'].sum():,.0f} Pax")
-    k2.metric("Monthly Mean Projected Run-Rate", f"{forecast_df['Tuned_Forecast'].mean():,.0f} Pax/mo")
-    k3.metric("Baseline Variance Delta (Mean)", f"{forecast_df['Deviation_%'].mean():+.2f}%")
+    k1.metric("Cumulative Inbound", f"{forecast_df['Tuned_Forecast'].sum():,.0f} Pax")
+    k2.metric("Monthly Mean Rate", f"{forecast_df['Tuned_Forecast'].mean():,.0f} Pax/mo")
+    k3.metric("Baseline Variance (Mean)", f"{forecast_df['Deviation_%'].mean():+.2f}%")
     k4.metric(
-        "Critical Alert Load (Anomaly)",
-        f"{(forecast_df['Clean_Status'] != 'Normal Demand (🟢)').sum()} / {len(forecast_df)} Horizon Months",
+        "Critical Alert Months",
+        f"{(forecast_df['Clean_Status'] != 'Normal Demand (🟢)').sum()} / {len(forecast_df)} Months",
     )
 
 # -------------------------------------------------------------------
-# TAB 2: HOLDOUT EVALUATION & INFERENCES
+# TAB 2: FORECAST CURVES & RESIDUALS
 # -------------------------------------------------------------------
-elif current_tab == "📈 Holdout Evaluation & Inferences":
+elif current_tab == "📈 Forecast Curves & Residuals":
     st.markdown("<div class='mot-section-header'>ការព្យាករណ៍តម្រូវការទេសចរណ៍ • Time-Series Forecast Curve vs. Actuals</div>", unsafe_allow_html=True)
     
     fig = go.Figure()
@@ -504,12 +457,13 @@ elif current_tab == "📈 Holdout Evaluation & Inferences":
         )
 
     fig.update_layout(
-        height=460,
+        height=450,
         plot_bgcolor="white",
         hovermode="x unified",
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         xaxis=dict(title="", showgrid=True, gridcolor="#f1f5f9"),
-        yaxis=dict(title="Inbound International Arrivals", tickformat=",.0f", showgrid=True, gridcolor="#f1f5f9"),
+        yaxis=dict(title="Inbound Arrivals", tickformat=",.0f", showgrid=True, gridcolor="#f1f5f9"),
+        margin=dict(l=10, r=10, t=30, b=10),
     )
     st.plotly_chart(fig, use_container_width=True)
 
@@ -525,11 +479,11 @@ elif current_tab == "📈 Holdout Evaluation & Inferences":
                 eval_df,
                 x="Date",
                 y="Residual",
-                title="Monthly Inbound Residual Error (Actuals - Forecast)",
+                title="Monthly Inbound Residual (Actuals - Forecast)",
                 color="Residual",
                 color_continuous_scale="Tealrose",
             )
-            fig_res.update_layout(plot_bgcolor="white", height=320)
+            fig_res.update_layout(plot_bgcolor="white", height=320, margin=dict(l=10, r=10, t=40, b=10))
             st.plotly_chart(fig_res, use_container_width=True)
             
         with c_res2:
@@ -537,17 +491,17 @@ elif current_tab == "📈 Holdout Evaluation & Inferences":
                 eval_df,
                 x="Date",
                 y="APE_%",
-                title="Absolute Percentage Error (APE %) Over Evaluation Horizon",
+                title="Absolute Percentage Error (APE %) Horizon",
                 markers=True,
             )
             fig_ape.update_traces(line_color="#e11d48", line_width=2.5)
-            fig_ape.update_layout(plot_bgcolor="white", height=320, yaxis_ticksuffix="%")
+            fig_ape.update_layout(plot_bgcolor="white", height=320, yaxis_ticksuffix="%", margin=dict(l=10, r=10, t=40, b=10))
             st.plotly_chart(fig_ape, use_container_width=True)
 
 # -------------------------------------------------------------------
-# TAB 3: ANOMALY & EARLY WARNING MATRIX
+# TAB 3: EARLY WARNING & ACTION MATRIX
 # -------------------------------------------------------------------
-elif current_tab == "🚨 Anomaly & Early Warning Matrix":
+elif current_tab == "🚨 Early Warning & Action Matrix":
     st.markdown("<div class='mot-section-header'>ប្រព័ន្ធប្រកាសអាសន្ន និងវិធានការប្រតិបត្តិ • Early Warning Threshold Distribution</div>", unsafe_allow_html=True)
 
     col_dist, col_table = st.columns([1, 2.2])
@@ -577,11 +531,12 @@ elif current_tab == "🚨 Anomaly & Early Warning Matrix":
             text="Count",
         )
         fig_bar.update_layout(
-            height=380,
+            height=360,
             showlegend=False,
             plot_bgcolor="white",
             xaxis_title="",
             yaxis_title="Observed Months",
+            margin=dict(l=10, r=10, t=20, b=10),
         )
         st.plotly_chart(fig_bar, use_container_width=True)
 
@@ -628,9 +583,7 @@ elif current_tab == "🚨 Anomaly & Early Warning Matrix":
 # -------------------------------------------------------------------
 elif current_tab == "⚙️ Policy Simulation Sandbox":
     st.markdown("<div class='mot-section-header'>ការពិសោធន៍គោលនយោបាយ • Real-Time Feature Attribution Sandbox</div>", unsafe_allow_html=True)
-    st.markdown(
-        "Directly evaluates sensitivity against live LightGBM inference endpoints (`/api/v1/predict`) to observe non-linear interactions across meteorological indices, origin market holidays, and seasonal trends."
-    )
+    st.caption("Evaluates sensitivity against LightGBM inference endpoints to observe climate & origin holiday interactions.")
 
     with st.form("simulation_form"):
         col_s1, col_s2, col_s3 = st.columns(3)
@@ -648,12 +601,12 @@ elif current_tab == "⚙️ Policy Simulation Sandbox":
             sim_rain = st.slider("Total Precipitation (Rainfall mm)", min_value=0.0, max_value=600.0, value=110.0, step=5.0)
 
         with col_s3:
-            sim_kh_holidays = st.number_input("Cambodia Statutory Holiday Days", min_value=0, max_value=15, value=3)
+            sim_kh_holidays = st.number_input("Cambodia Statutory Holidays", min_value=0, max_value=15, value=3)
             sim_origin_holidays = st.number_input("Total Key Origin Holidays", min_value=0, max_value=30, value=12)
-            sim_china_holidays = st.number_input("China Holidays (Golden Week / Spring Fest)", min_value=0, max_value=10, value=1)
-            sim_covid = st.selectbox("Structural Shock (COVID Damping Parameter)", options=[0, 1], index=0)
+            sim_china_holidays = st.number_input("China Holidays (Golden Week / Spring)", min_value=0, max_value=10, value=1)
+            sim_covid = st.selectbox("Structural Shock (COVID Damping)", options=[0, 1], index=0)
 
-        dispatch_btn = st.form_submit_button("⚡ Run Live LightGBM Inference", use_container_width=True)
+        dispatch_btn = st.form_submit_button("⚡ Run LightGBM Inference", use_container_width=True)
 
     if dispatch_btn:
         payload = {
@@ -684,22 +637,21 @@ elif current_tab == "⚙️ Policy Simulation Sandbox":
 
                     st.success("✅ Real-Time Prediction Completed & Synchronized to PostgreSQL")
                     r1, r2, r3 = st.columns(3)
-                    r1.metric("Predicted Arrival Volume (ŷt)", f"{pred_val:,.0f} Arrivals")
-                    r2.metric("Variance Against Baseline (Bt)", f"{dev_val:+.2f}%")
-                    r3.metric("Assigned EWS Operational Tier", status_lbl)
+                    r1.metric("Predicted Volume (ŷt)", f"{pred_val:,.0f} Arrivals")
+                    r2.metric("Variance Delta (Bt)", f"{dev_val:+.2f}%")
+                    r3.metric("Assigned EWS Tier", status_lbl)
                 else:
                     st.error(f"Inference Failure: HTTP {res.status_code} - {res.text}")
-            except Exception as ex:
-                st.warning(f"Connection Exception to {API_URL}: Microservice is offline. Local fallback calculation:")
-                # Local estimate fallback
+            except Exception:
+                st.warning(f"FastAPI microservice (:8000) offline. Executing model fallback formula:")
                 pred_val = (sim_lag1 * 0.45) + (sim_roll3 * 0.55)
                 dev_val = ((pred_val - sim_baseline) / sim_baseline) * 100
                 st.info(f"Fallback Inferred Volume: **{pred_val:,.0f}** | Baseline Variance: **{dev_val:+.2f}%**")
 
 # -------------------------------------------------------------------
-# TAB 5: DATA ARCHITECTURE & LINEAGE
+# TAB 5: DATA LINEAGE & PIPELINE ARCHITECTURE
 # -------------------------------------------------------------------
-elif current_tab == "📚 Data Architecture & Lineage":
+elif current_tab == "📚 Data Lineage & Pipeline Architecture":
     st.markdown("<div class='mot-section-header'>ស្ថាបត្យកម្មទិន្នន័យ • Data Pipelines, Features & Specifications</div>", unsafe_allow_html=True)
 
     col_meta, col_feat = st.columns([1, 1.3])

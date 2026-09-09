@@ -20,10 +20,9 @@ streamlit*.log
 .vscode/
 .DS_Store
 Thumbs.db
-.venv/
-venv/
-__pycache__/
-*.pyc
-.DS_Store
 logs/
+
+# Keep the two runtime datasets required by the Streamlit deployment.
 data/*.csv
+!data/Cambodia_Tourism_Forecast_EWS.csv
+!data/Cambodia_Tourism_Enriched.csv
