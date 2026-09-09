@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+joblib
+numpy
+pandas
+plotly
+pydantic
+sqlalchemy
+psycopg2-binary
+lightgbm
+scikit-learn
+streamlit
+requests
+pytest
