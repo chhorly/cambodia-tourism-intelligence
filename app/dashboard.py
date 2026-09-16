@@ -30,8 +30,9 @@ st.markdown(
         font-family: 'JetBrains Mono', monospace !important;
     }
     
-    .block-container { 
-        padding: 1.5rem 1.5rem 2.5rem 1.5rem; 
+    .block-container {
+        /* Leave enough room for Streamlit Cloud's fixed top toolbar. */
+        padding: 8rem 1.5rem 2.5rem 1.5rem !important;
         max-width: 100%; 
     }
 
@@ -73,10 +74,12 @@ st.markdown(
     }
     
     .gov-title-khmer {
+        font-family: 'Kantumruy Pro', 'Plus Jakarta Sans', sans-serif;
         font-size: 1.1rem;
         font-weight: 700;
         color: #1e3a8a;
-        line-height: 1.25;
+        line-height: 1.15;
+        min-height: 1.3em;
     }
     
     .gov-title-en {
@@ -192,7 +195,7 @@ st.markdown(
     /* Mobile Responsive Optimizations */
     @media (max-width: 768px) {
         .block-container {
-            padding: 1rem 0.8rem 2rem 0.8rem !important;
+            padding: 6.5rem 0.8rem 2rem 0.8rem !important;
         }
         .gov-navbar {
             flex-direction: column;
@@ -306,16 +309,37 @@ try:
 except Exception:
     api_online = False
 
-# 5. Top Header (Stacked & Mobile-Clean)
+# 5. Language and Top Header (one language at a time)
+language = st.radio(
+    "Language",
+    options=["English", "ខ្មែរ"],
+    horizontal=True,
+    label_visibility="collapsed",
+)
+is_khmer = language == "ខ្មែរ"
+
+
+def ui(english, khmer):
+    return khmer if is_khmer else english
+
+
 api_tag = "API: LIVE (Port 8000)" if api_online else "API: FALLBACK MODE"
+brand_title = ui(
+    "Ministry of Tourism • Statistics and Planning Department",
+    "ក្រសួងទេសចរណ៍ • នាយកដ្ឋានស្ថិតិ និងផែនការ",
+)
+brand_subtitle = ui(
+    "TOURISM INTELLIGENCE PLATFORM • APPLIED MLOps",
+    "វេទិកាព័ត៌មានវៃឆ្លាតទេសចរណ៍ • ប្រព័ន្ធ MLOps",
+)
 st.markdown(
     f"""
     <div class="gov-navbar">
         <div class="gov-brand">
             <div class="gov-emblem-badge">🇰🇭</div>
             <div class="gov-titles">
-                <div class="gov-title-khmer">ក្រសួងទេសចរណ៍ • នាយកដ្ឋានស្ថិតិ និងផែនការ</div>
-                <div class="gov-title-en">TOURISM INTELLIGENCE PLATFORM • APPLIED MLOps</div>
+                <div class="gov-title-khmer">{brand_title}</div>
+                <div class="gov-title-en">{brand_subtitle}</div>
             </div>
         </div>
         <div class="mlops-status-pill">{api_tag}</div>
@@ -326,15 +350,15 @@ st.markdown(
 
 # Responsive Navigation Bar
 nav_options = [
-    "📊 Executive KPIs & Health",
-    "📈 Forecast Curves & Residuals",
-    "🚨 Early Warning & Action Matrix",
-    "⚙️ Policy Simulation Sandbox",
-    "📚 Data Lineage & Pipeline Architecture",
+    ui("📊 Executive KPIs & Health", "📊 សូចនាករប្រតិបត្តិ និងសុខភាពម៉ូដែល"),
+    ui("📈 Forecast Curves & Residuals", "📈 ខ្សែកោងព្យាករណ៍ និងកំហុស"),
+    ui("🚨 Early Warning & Action Matrix", "🚨 ប្រព័ន្ធព្រមាន និងតារាងសកម្មភាព"),
+    ui("⚙️ Policy Simulation Sandbox", "⚙️ ការក្លែងធ្វើគោលនយោបាយ"),
+    ui("📚 Data Lineage & Pipeline Architecture", "📚 ប្រភពទិន្នន័យ និងស្ថាបត្យកម្មបំពង់"),
 ]
 
 current_tab = st.selectbox(
-    "Select Platform Module",
+    ui("Select Platform Module", "ជ្រើសរើសផ្នែកប្រព័ន្ធ"),
     options=nav_options,
     index=0,
     label_visibility="collapsed",
@@ -343,22 +367,21 @@ current_tab = st.selectbox(
 # -------------------------------------------------------------------
 # TAB 1: EXECUTIVE KPIS & MODEL HEALTH
 # -------------------------------------------------------------------
-if current_tab == "📊 Executive KPIs & Health":
+if current_tab == nav_options[0]:
     st.markdown(
-        """
+        f"""
         <div class="mot-hero">
-            <div class="mot-hero-sub">Production Inferences & Predictive Intelligence</div>
-            <div class="mot-hero-title">ព្រះរាជាណាចក្រអច្ឆរិយៈ • National Demand Forecast System</div>
+            <div class="mot-hero-sub">{ui("Production Inferences & Predictive Intelligence", "ការព្យាករណ៍ផលិតកម្ម និងព័ត៌មានវៃឆ្លាត")}</div>
+            <div class="mot-hero-title">{ui("National Demand Forecast System", "ប្រព័ន្ធព្យាករណ៍តម្រូវការទេសចរណ៍ជាតិ")}</div>
             <div class="mot-hero-desc">
-                Serving low-latency LightGBM regression inference to project national international tourist volumes. 
-                Trained on 186 chronological monthly records across 2011–2026, fused with climate covariates and national holiday signals.
+                {ui("Serving low-latency LightGBM regression inference to project national international tourist volumes. Trained on 186 chronological monthly records across 2011–2026, fused with climate covariates and national holiday signals.", "ប្រើប្រាស់ LightGBM ដើម្បីព្យាករណ៍ចំនួនភ្ញៀវទេសចរអន្តរជាតិប្រចាំជាតិ។ ម៉ូដែលបានបណ្តុះបណ្តាលលើទិន្នន័យប្រចាំខែចំនួន ១៨៦ ពីឆ្នាំ ២០១១–២០២៦ ដោយរួមបញ្ចូលអាកាសធាតុ និងថ្ងៃឈប់សម្រាកជាតិ។")}
             </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    st.markdown("<div class='mot-section-header'>ម៉ូដែល និងដំណើរការប្រតិបត្តិការ • Champion Model Health & Lineage</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='mot-section-header'>{ui('Champion Model Health & Lineage', 'សុខភាពម៉ូដែល និងប្រភពទិន្នន័យ')}</div>", unsafe_allow_html=True)
     
     m1, m2, m3, m4 = st.columns(4)
     with m1:
@@ -409,22 +432,22 @@ if current_tab == "📊 Executive KPIs & Health":
         )
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("<div class='mot-section-header'>សូចនាករព្យាករណ៍ទូទាំងប្រទេស • 12-Month Projected Volume Summary</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='mot-section-header'>{ui('12-Month Projected Volume Summary', 'សង្ខេបបរិមាណព្យាករណ៍រយៈពេល ១២ ខែ')}</div>", unsafe_allow_html=True)
 
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric("Cumulative Inbound", f"{forecast_df['Tuned_Forecast'].sum():,.0f} Pax")
-    k2.metric("Monthly Mean Rate", f"{forecast_df['Tuned_Forecast'].mean():,.0f} Pax/mo")
-    k3.metric("Baseline Variance (Mean)", f"{forecast_df['Deviation_%'].mean():+.2f}%")
+    k1.metric(ui("Cumulative Inbound", "ចំនួនភ្ញៀវសរុប"), f"{forecast_df['Tuned_Forecast'].sum():,.0f} Pax")
+    k2.metric(ui("Monthly Mean Rate", "អត្រាមធ្យមប្រចាំខែ"), f"{forecast_df['Tuned_Forecast'].mean():,.0f} Pax/mo")
+    k3.metric(ui("Baseline Variance (Mean)", "គម្លាតមធ្យមពីមូលដ្ឋាន"), f"{forecast_df['Deviation_%'].mean():+.2f}%")
     k4.metric(
-        "Critical Alert Months",
+        ui("Critical Alert Months", "ចំនួនខែមានការព្រមាន"),
         f"{(forecast_df['Clean_Status'] != 'Normal Demand (🟢)').sum()} / {len(forecast_df)} Months",
     )
 
 # -------------------------------------------------------------------
 # TAB 2: FORECAST CURVES & RESIDUALS
 # -------------------------------------------------------------------
-elif current_tab == "📈 Forecast Curves & Residuals":
-    st.markdown("<div class='mot-section-header'>ការព្យាករណ៍តម្រូវការទេសចរណ៍ • Time-Series Forecast Curve vs. Actuals</div>", unsafe_allow_html=True)
+elif current_tab == nav_options[1]:
+    st.markdown(f"<div class='mot-section-header'>{ui('Time-Series Forecast Curve vs. Actuals', 'ខ្សែកោងព្យាករណ៍តាមពេលវេលា និងទិន្នន័យជាក់ស្តែង')}</div>", unsafe_allow_html=True)
     
     fig = go.Figure()
     fig.add_trace(
@@ -469,7 +492,7 @@ elif current_tab == "📈 Forecast Curves & Residuals":
 
     # Residuals & Error Breakdown
     if "Actual_Arrivals" in forecast_df.columns and forecast_df["Actual_Arrivals"].notna().any():
-        st.markdown("<div class='mot-section-header'>ការវិភាគកំហុស • Residual Distribution & Error Metrics</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='mot-section-header'>{ui('Residual Distribution & Error Metrics', 'ការបែងចែកកំហុស និងសូចនាករកំហុស')}</div>", unsafe_allow_html=True)
         eval_df = forecast_df.dropna(subset=["Actual_Arrivals"]).copy()
         eval_df["Residual"] = eval_df["Actual_Arrivals"] - eval_df["Tuned_Forecast"]
         
@@ -501,12 +524,12 @@ elif current_tab == "📈 Forecast Curves & Residuals":
 # -------------------------------------------------------------------
 # TAB 3: EARLY WARNING & ACTION MATRIX
 # -------------------------------------------------------------------
-elif current_tab == "🚨 Early Warning & Action Matrix":
-    st.markdown("<div class='mot-section-header'>ប្រព័ន្ធប្រកាសអាសន្ន និងវិធានការប្រតិបត្តិ • Early Warning Threshold Distribution</div>", unsafe_allow_html=True)
+elif current_tab == nav_options[2]:
+    st.markdown(f"<div class='mot-section-header'>{ui('Early Warning Threshold Distribution', 'ការបែងចែកកម្រិតប្រព័ន្ធព្រមាន')}</div>", unsafe_allow_html=True)
 
     col_dist, col_table = st.columns([1, 2.2])
     with col_dist:
-        st.caption("Distribution of Seasonal Deviations ($\pm 15\%$)")
+        st.caption(ui("Distribution of Seasonal Deviations ($\\pm 15\\%$)", "ការបែងចែកគម្លាតតាមរដូវកាល ($\\pm 15\\%$)"))
         order = ["High Demand (🔴)", "Normal Demand (🟢)", "Low Demand (🟡)"]
         palette = {
             "High Demand (🔴)": "#ef4444",
@@ -541,7 +564,7 @@ elif current_tab == "🚨 Early Warning & Action Matrix":
         st.plotly_chart(fig_bar, use_container_width=True)
 
     with col_table:
-        st.caption("Prescriptive Operations & Threshold Classification Matrix")
+        st.caption(ui("Prescriptive Operations & Threshold Classification Matrix", "តារាងចាត់ថ្នាក់កម្រិតព្រមាន និងសកម្មភាព"))
         display_df = forecast_df[[
             "Date",
             "Clean_Status",
@@ -581,32 +604,32 @@ elif current_tab == "🚨 Early Warning & Action Matrix":
 # -------------------------------------------------------------------
 # TAB 4: POLICY SIMULATION SANDBOX (WHAT-IF INFERENCE)
 # -------------------------------------------------------------------
-elif current_tab == "⚙️ Policy Simulation Sandbox":
-    st.markdown("<div class='mot-section-header'>ការពិសោធន៍គោលនយោបាយ • Real-Time Feature Attribution Sandbox</div>", unsafe_allow_html=True)
-    st.caption("Evaluates sensitivity against LightGBM inference endpoints to observe climate & origin holiday interactions.")
+elif current_tab == nav_options[3]:
+    st.markdown(f"<div class='mot-section-header'>{ui('Real-Time Feature Attribution Sandbox', 'ប្រព័ន្ធសាកល្បងសមាមាត្រលក្ខណៈពេលវេលាជាក់ស្តែង')}</div>", unsafe_allow_html=True)
+    st.caption(ui("Evaluates sensitivity against LightGBM inference endpoints to observe climate and origin holiday interactions.", "វាស់ស្ទង់ឥទ្ធិពលរបស់អាកាសធាតុ និងថ្ងៃឈប់សម្រាកប្រទេសដើមកំណើត តាមរយៈ LightGBM។"))
 
     with st.form("simulation_form"):
         col_s1, col_s2, col_s3 = st.columns(3)
         with col_s1:
-            sim_date = st.date_input("Target Evaluation Month", value=pd.to_datetime("2026-11-01"))
-            sim_baseline = st.number_input("Seasonal Baseline Target (Bt)", value=364436.0, step=1000.0)
-            sim_lag1 = st.number_input("Lag 1 Inbound Arrivals (t-1)", value=327239.0, step=1000.0)
-            sim_lag3 = st.number_input("Lag 3 Inbound Arrivals (t-3)", value=347492.0, step=1000.0)
-            sim_lag12 = st.number_input("Lag 12 Inbound Arrivals (t-12)", value=300000.0, step=1000.0)
+            sim_date = st.date_input(ui("Target Evaluation Month", "ខែគោលដៅសម្រាប់វាយតម្លៃ"), value=pd.to_datetime("2026-11-01"))
+            sim_baseline = st.number_input(ui("Seasonal Baseline Target (Bt)", "គោលដៅមូលដ្ឋានតាមរដូវកាល (Bt)"), value=364436.0, step=1000.0)
+            sim_lag1 = st.number_input(ui("Lag 1 Inbound Arrivals (t-1)", "ចំនួនភ្ញៀវយឺត ១ ខែ (t-1)"), value=327239.0, step=1000.0)
+            sim_lag3 = st.number_input(ui("Lag 3 Inbound Arrivals (t-3)", "ចំនួនភ្ញៀវយឺត ៣ ខែ (t-3)"), value=347492.0, step=1000.0)
+            sim_lag12 = st.number_input(ui("Lag 12 Inbound Arrivals (t-12)", "ចំនួនភ្ញៀវយឺត ១២ ខែ (t-12)"), value=300000.0, step=1000.0)
 
         with col_s2:
-            sim_roll3 = st.number_input("Rolling 3-Month Mean", value=337694.0, step=1000.0)
-            sim_roll12 = st.number_input("Rolling 12-Month Mean", value=350000.0, step=1000.0)
-            sim_temp = st.slider("Mean Temperature (°C)", min_value=20.0, max_value=38.0, value=27.5, step=0.1)
-            sim_rain = st.slider("Total Precipitation (Rainfall mm)", min_value=0.0, max_value=600.0, value=110.0, step=5.0)
+            sim_roll3 = st.number_input(ui("Rolling 3-Month Mean", "មធ្យមរំកិល ៣ ខែ"), value=337694.0, step=1000.0)
+            sim_roll12 = st.number_input(ui("Rolling 12-Month Mean", "មធ្យមរំកិល ១២ ខែ"), value=350000.0, step=1000.0)
+            sim_temp = st.slider(ui("Mean Temperature (°C)", "សីតុណ្ហភាពមធ្យម (°C)"), min_value=20.0, max_value=38.0, value=27.5, step=0.1)
+            sim_rain = st.slider(ui("Total Precipitation (Rainfall mm)", "បរិមាណទឹកភ្លៀងសរុប (មម)"), min_value=0.0, max_value=600.0, value=110.0, step=5.0)
 
         with col_s3:
-            sim_kh_holidays = st.number_input("Cambodia Statutory Holidays", min_value=0, max_value=15, value=3)
-            sim_origin_holidays = st.number_input("Total Key Origin Holidays", min_value=0, max_value=30, value=12)
-            sim_china_holidays = st.number_input("China Holidays (Golden Week / Spring)", min_value=0, max_value=10, value=1)
-            sim_covid = st.selectbox("Structural Shock (COVID Damping)", options=[0, 1], index=0)
+            sim_kh_holidays = st.number_input(ui("Cambodia Statutory Holidays", "ថ្ងៃឈប់សម្រាកតាមច្បាប់កម្ពុជា"), min_value=0, max_value=15, value=3)
+            sim_origin_holidays = st.number_input(ui("Total Key Origin Holidays", "ថ្ងៃឈប់សម្រាកប្រទេសដើមសំខាន់ៗសរុប"), min_value=0, max_value=30, value=12)
+            sim_china_holidays = st.number_input(ui("China Holidays (Golden Week / Spring)", "ថ្ងៃឈប់សម្រាកចិន (Golden Week / បុណ្យចូលឆ្នាំ)"), min_value=0, max_value=10, value=1)
+            sim_covid = st.selectbox(ui("Structural Shock (COVID Damping)", "ការរំខានរចនាសម្ព័ន្ធ (COVID)"), options=[0, 1], index=0)
 
-        dispatch_btn = st.form_submit_button("⚡ Run LightGBM Inference", use_container_width=True)
+        dispatch_btn = st.form_submit_button(ui("⚡ Run LightGBM Inference", "⚡ ដំណើរការព្យាករណ៍ LightGBM"), use_container_width=True)
 
     if dispatch_btn:
         payload = {
@@ -651,8 +674,8 @@ elif current_tab == "⚙️ Policy Simulation Sandbox":
 # -------------------------------------------------------------------
 # TAB 5: DATA LINEAGE & PIPELINE ARCHITECTURE
 # -------------------------------------------------------------------
-elif current_tab == "📚 Data Lineage & Pipeline Architecture":
-    st.markdown("<div class='mot-section-header'>ស្ថាបត្យកម្មទិន្នន័យ • Data Pipelines, Features & Specifications</div>", unsafe_allow_html=True)
+elif current_tab == nav_options[4]:
+    st.markdown(f"<div class='mot-section-header'>{ui('Data Pipelines, Features & Specifications', 'បំពង់ទិន្នន័យ លក្ខណៈពិសេស និងលក្ខណៈបច្ចេកទេស')}</div>", unsafe_allow_html=True)
 
     col_meta, col_feat = st.columns([1, 1.3])
     with col_meta:
