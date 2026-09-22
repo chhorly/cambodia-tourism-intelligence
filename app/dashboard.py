@@ -19,15 +19,25 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kantumruy+Pro:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
     
     * { 
-        font-family: 'Plus Jakarta Sans';
+        font-family: 'Inter', 'Kantumruy Pro', sans-serif;
+        letter-spacing: -0.01em;
         
     }
     
     code, pre, .mono {
         font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Inter', 'Kantumruy Pro', sans-serif !important;
+        letter-spacing: -0.035em;
+    }
+
+    .stMarkdown, .stText, .stCaption, label, button, input, textarea {
+        font-family: 'Inter', 'Kantumruy Pro', sans-serif !important;
     }
     
     .block-container {
@@ -74,7 +84,7 @@ st.markdown(
     }
     
     .gov-title-khmer {
-        font-family: 'Kantumruy Pro', 'Plus Jakarta Sans', sans-serif;
+        font-family: 'Kantumruy Pro', 'Inter', sans-serif;
         font-size: 1.1rem;
         font-weight: 700;
         color: #1e3a8a;
@@ -126,7 +136,8 @@ st.markdown(
     
     .mot-hero-title {
         font-size: 1.85rem;
-        font-weight: 800;
+        font-weight: 700;
+        letter-spacing: -0.045em;
         color: #facc15;
         line-height: 1.3;
         margin-bottom: 0.6rem;
@@ -142,7 +153,8 @@ st.markdown(
     /* Section Headings with Gold Underline */
     .mot-section-header {
         font-size: 1.2rem;
-        font-weight: 800;
+        font-weight: 700;
+        letter-spacing: -0.035em;
         color: #1e3a8a;
         margin: 1.2rem 0 0.8rem 0;
         display: inline-block;
@@ -180,7 +192,8 @@ st.markdown(
     
     .ds-card-val {
         font-size: 1.45rem;
-        font-weight: 800;
+        font-weight: 700;
+        letter-spacing: -0.025em;
         color: #0f172a;
         font-family: 'JetBrains Mono', monospace;
     }
