@@ -274,6 +274,7 @@ st.markdown(
     .gov-title-khmer {
         color: #171827;
         font-weight: 800;
+        line-height: 1.45;
     }
 
     .gov-title-en {
@@ -309,6 +310,8 @@ st.markdown(
 
     .mot-hero-desc {
         color: #6f7785;
+        line-height: 1.7;
+        max-width: 760px;
     }
 
     .mot-section-header {
@@ -340,6 +343,7 @@ st.markdown(
 
     .ds-card-sub {
         color: #18a86d;
+        line-height: 1.55;
     }
 
     div[data-baseweb="select"] > div {
@@ -527,8 +531,9 @@ except Exception:
 # 5. Language and Top Header (one language at a time)
 language = st.radio(
     "Language",
-    options=["English", "ខ្មែរ"],
+    options=["ខ្មែរ", "English"],
     horizontal=True,
+    index=0,
     label_visibility="collapsed",
 )
 is_khmer = language == "ខ្មែរ"
@@ -538,7 +543,11 @@ def ui(english, khmer):
     return khmer if is_khmer else english
 
 
-api_tag = "API: LIVE (Port 8000)" if api_online else "API: FALLBACK MODE"
+api_tag = (
+    ui("Service: live", "ប្រព័ន្ធ៖ ដំណើរការ")
+    if api_online
+    else ui("Service: local data", "ប្រព័ន្ធ៖ ទិន្នន័យមូលដ្ឋាន")
+)
 brand_title = ui(
     "Ministry of Tourism • Statistics and Planning Department",
     "ក្រសួងទេសចរណ៍ • នាយកដ្ឋានស្ថិតិ និងផែនការ",
@@ -565,11 +574,11 @@ st.markdown(
 
 # Responsive Navigation Bar
 nav_options = [
-    ui("📊 Executive KPIs & Health", "📊 សូចនាករប្រតិបត្តិ និងសុខភាពម៉ូដែល"),
-    ui("📈 Forecast Curves & Residuals", "📈 ខ្សែកោងព្យាករណ៍ និងកំហុស"),
-    ui("🚨 Early Warning & Action Matrix", "🚨 ប្រព័ន្ធព្រមាន និងតារាងសកម្មភាព"),
-    ui("⚙️ Policy Simulation Sandbox", "⚙️ ការក្លែងធ្វើគោលនយោបាយ"),
-    ui("📚 Data Lineage & Pipeline Architecture", "📚 ប្រភពទិន្នន័យ និងស្ថាបត្យកម្មបំពង់"),
+    ui("📊 Overview", "📊 សង្ខេបសំខាន់ៗ"),
+    ui("📈 Forecast trend", "📈 និន្នាការព្យាករណ៍"),
+    ui("🚨 Alerts and actions", "🚨 ការព្រមាន និងសកម្មភាព"),
+    ui("⚙️ What-if simulation", "⚙️ សាកល្បងគោលនយោបាយ"),
+    ui("📚 Technical details", "📚 ព័ត៌មានបច្ចេកទេស"),
 ]
 
 current_tab = st.selectbox(
@@ -586,8 +595,8 @@ if current_tab == nav_options[0]:
     st.markdown(
         f"""
         <div class="mot-hero">
-            <div class="mot-hero-sub">{ui("Production Inferences & Predictive Intelligence", "ការព្យាករណ៍ផលិតកម្ម និងព័ត៌មានវៃឆ្លាត")}</div>
-            <div class="mot-hero-title">{ui("National Demand Forecast System", "ប្រព័ន្ធព្យាករណ៍តម្រូវការទេសចរណ៍ជាតិ")}</div>
+            <div class="mot-hero-sub">{ui("Tourism demand outlook", "ទស្សនវិស័យតម្រូវការទេសចរណ៍")}</div>
+            <div class="mot-hero-title">{ui("National tourism demand", "តម្រូវការទេសចរណ៍ជាតិ")}</div>
             <div class="mot-hero-desc">
                 {ui("Serving low-latency log-transformed LightGBM regression inference to project national international tourist volumes. Trained on 186 chronological monthly records across 2011–2026, fused with climate covariates and national holiday signals.", "ប្រើប្រាស់ LightGBM ដែលបានបម្លែងគោលដៅជា log ដើម្បីព្យាករណ៍ចំនួនភ្ញៀវទេសចរអន្តរជាតិប្រចាំជាតិ។ ម៉ូដែលបានបណ្តុះបណ្តាលលើទិន្នន័យប្រចាំខែចំនួន ១៨៦ ពីឆ្នាំ ២០១១–២០២៦ ដោយរួមបញ្ចូលអាកាសធាតុ និងថ្ងៃឈប់សម្រាកជាតិ។")}
             </div>
@@ -596,16 +605,16 @@ if current_tab == nav_options[0]:
         unsafe_allow_html=True,
     )
 
-    st.markdown(f"<div class='mot-section-header'>{ui('Champion Model Health & Lineage', 'សុខភាពម៉ូដែល និងប្រភពទិន្នន័យ')}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='mot-section-header'>{ui('Forecast status', 'ស្ថានភាពការព្យាករណ៍')}</div>", unsafe_allow_html=True)
     
     m1, m2, m3, m4 = st.columns(4)
     with m1:
         st.markdown(
-            """
+            f"""
             <div class="ds-card">
-                <div class="ds-card-title">Production Model</div>
-                <div class="ds-card-val">Log-LightGBM</div>
-                <div class="ds-card-sub">log1p target • expm1 output</div>
+                <div class="ds-card-title">{ui('Forecast model', 'ម៉ូដែលព្យាករណ៍')}</div>
+                <div class="ds-card-val">{ui('Demand forecast', 'ព្យាករណ៍តម្រូវការ')}</div>
+                <div class="ds-card-sub">{ui('Designed for proportional demand changes', 'ផ្តោតលើការប្រែប្រួលតម្រូវការតាមសមាមាត្រ')}</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -614,9 +623,9 @@ if current_tab == nav_options[0]:
         st.markdown(
             f"""
             <div class="ds-card">
-                <div class="ds-card-title">Holdout MAPE</div>
+                <div class="ds-card-title">{ui('Average forecast error', 'កំហុសព្យាករណ៍ជាមធ្យម')}</div>
                 <div class="ds-card-val">{holdout_mape_text}</div>
-                <div class="ds-card-sub">Chronological {holdout_months}-month holdout</div>
+                <div class="ds-card-sub">{ui(f'Average difference across {holdout_months} test months', f'ខុសគ្នាជាមធ្យមក្នុងរយៈពេលសាកល្បង {holdout_months} ខែ')}</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -626,22 +635,22 @@ if current_tab == nav_options[0]:
         st.markdown(
             f"""
             <div class="ds-card">
-                <div class="ds-card-title">Test Horizon R²</div>
-                <div class="ds-card-val" style="color: {r2_color};">{holdout_r2_text}</div>
-                <div class="ds-card-sub">{holdout_months}-month chronological test holdout</div>
+                <div class="ds-card-title">{ui('Forecast reliability', 'ភាពជឿជាក់នៃការព្យាករណ៍')}</div>
+                <div class="ds-card-val" style="color: {r2_color};">{ui('Needs improvement' if holdout_r2 is not None and holdout_r2 < 0 else 'Acceptable', 'ត្រូវការកែលម្អ' if holdout_r2 is not None and holdout_r2 < 0 else 'អាចទទួលយកបាន')}</div>
+                <div class="ds-card-sub">{ui(f'R² {holdout_r2_text}: test changes are difficult to explain', f'R² {holdout_r2_text}៖ ត្រូវការកែលម្អការពន្យល់ការប្រែប្រួលក្នុងខែសាកល្បង')}</div>
             </div>
             """,
             unsafe_allow_html=True,
         )
     with m4:
-        status_text = "LIVE (:8000)" if api_online else "FALLBACK (CSV)"
+        status_text = ui("LIVE", "ដំណើរការ") if api_online else ui("LOCAL DATA", "ទិន្នន័យមូលដ្ឋាន")
         status_color = "#059669" if api_online else "#d97706"
         st.markdown(
             f"""
             <div class="ds-card">
-                <div class="ds-card-title">FastAPI Microservice</div>
+                <div class="ds-card-title">{ui('Service status', 'ស្ថានភាពប្រព័ន្ធ')}</div>
                 <div class="ds-card-val" style="color: {status_color}; font-size: 1.25rem;">{status_text}</div>
-                <div class="ds-card-sub">PostgreSQL Container :5432</div>
+                <div class="ds-card-sub">{ui('Ready for dashboard requests', 'រួចរាល់សម្រាប់សំណើពីផ្ទាំងគ្រប់គ្រង')}</div>
             </div>
             """,
             unsafe_allow_html=True,
