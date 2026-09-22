@@ -379,20 +379,22 @@ st.markdown(
 
     [data-testid="stMetricLabel"] {
         color: #778292;
-        font-size: clamp(0.76rem, 1.1vw, 0.95rem);
+        font-size: clamp(0.68rem, 0.95vw, 0.86rem);
         font-weight: 600;
         line-height: 1.45;
         white-space: normal;
+        max-width: 18rem;
     }
 
     [data-testid="stMetricValue"] {
         color: #171827;
-        font-size: clamp(1.45rem, 3vw, 2.35rem);
+        font-family: 'Inter', 'Kantumruy Pro', sans-serif !important;
+        font-size: clamp(1.25rem, 2.35vw, 2rem);
         font-weight: 700;
         line-height: 1.15;
         letter-spacing: -0.04em;
         white-space: normal;
-        overflow-wrap: anywhere;
+        overflow-wrap: normal;
     }
 
     [data-testid="column"] {
@@ -409,7 +411,11 @@ st.markdown(
         }
 
         [data-testid="stMetric"] {
-            padding: 0.7rem;
+            padding: 0.65rem;
+        }
+
+        [data-testid="stMetricValue"] {
+            font-size: clamp(1.1rem, 5vw, 1.55rem);
         }
     }
 </style>
