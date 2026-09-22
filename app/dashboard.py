@@ -240,6 +240,147 @@ st.markdown(
         font-size: 0.8rem;
         line-height: 1.6;
     }
+
+    /* Reference UI direction: airy travel dashboard with emerald actions. */
+    .stApp {
+        background: #edf7fc;
+        color: #171827;
+    }
+
+    .block-container {
+        padding: 3.5rem 2rem 2.5rem 2rem !important;
+        max-width: 1500px;
+    }
+
+    .gov-navbar {
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid #e5edf3;
+        border-bottom: 1px solid #e5edf3;
+        border-radius: 18px;
+        padding: 0.85rem 1rem;
+        margin-bottom: 1.1rem;
+        box-shadow: 0 8px 24px rgba(31, 55, 79, 0.06);
+    }
+
+    .gov-emblem-badge {
+        width: 42px;
+        height: 42px;
+        background: #17b978;
+        color: white;
+        border-radius: 12px;
+        box-shadow: none;
+    }
+
+    .gov-title-khmer {
+        color: #171827;
+        font-weight: 800;
+    }
+
+    .gov-title-en {
+        color: #7a8392;
+        letter-spacing: 0.05em;
+    }
+
+    .mlops-status-pill {
+        background: #f1fbf6;
+        border-color: #c6f0da;
+        color: #159b64;
+    }
+
+    .mot-hero {
+        background: linear-gradient(135deg, #ffffff 0%, #f5fbff 100%);
+        border: 1px solid #e2edf3;
+        color: #171827;
+        border-radius: 22px;
+        padding: 2rem 1.8rem;
+        box-shadow: 0 12px 28px rgba(31, 55, 79, 0.08);
+    }
+
+    .mot-hero-sub {
+        color: #17a96d;
+        font-size: 0.74rem;
+        letter-spacing: 0.08em;
+    }
+
+    .mot-hero-title {
+        color: #171827;
+        font-size: 2rem;
+    }
+
+    .mot-hero-desc {
+        color: #6f7785;
+    }
+
+    .mot-section-header {
+        color: #171827;
+        margin-top: 1rem;
+    }
+
+    .mot-section-header::after {
+        background: #18b978;
+        height: 4px;
+    }
+
+    .ds-card {
+        border: 1px solid #e4edf2;
+        border-top: 0;
+        border-radius: 18px;
+        padding: 1.15rem;
+        box-shadow: 0 7px 18px rgba(31, 55, 79, 0.06);
+    }
+
+    .ds-card-title {
+        color: #778292;
+        letter-spacing: 0.02em;
+    }
+
+    .ds-card-val {
+        color: #171827;
+    }
+
+    .ds-card-sub {
+        color: #18a86d;
+    }
+
+    div[data-baseweb="select"] > div {
+        background: white;
+        border: 1px solid #e2edf3;
+        border-radius: 14px;
+        box-shadow: 0 5px 14px rgba(31, 55, 79, 0.05);
+    }
+
+    .stButton > button,
+    .stFormSubmitButton > button {
+        background: #18b978;
+        border: 0;
+        border-radius: 12px;
+        color: white;
+        font-weight: 700;
+        box-shadow: 0 5px 12px rgba(24, 185, 120, 0.2);
+    }
+
+    .stButton > button:hover,
+    .stFormSubmitButton > button:hover {
+        background: #119d65;
+        border: 0;
+        color: white;
+    }
+
+    [data-testid="stMetric"] {
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid #e4edf2;
+        border-radius: 16px;
+        padding: 0.85rem 1rem;
+    }
+
+    [data-testid="stMetricLabel"] {
+        color: #778292;
+    }
+
+    [data-testid="stMetricValue"] {
+        color: #171827;
+        letter-spacing: -0.04em;
+    }
 </style>
 """,
     unsafe_allow_html=True,
