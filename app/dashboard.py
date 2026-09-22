@@ -379,11 +379,38 @@ st.markdown(
 
     [data-testid="stMetricLabel"] {
         color: #778292;
+        font-size: clamp(0.76rem, 1.1vw, 0.95rem);
+        font-weight: 600;
+        line-height: 1.45;
+        white-space: normal;
     }
 
     [data-testid="stMetricValue"] {
         color: #171827;
+        font-size: clamp(1.45rem, 3vw, 2.35rem);
+        font-weight: 700;
+        line-height: 1.15;
         letter-spacing: -0.04em;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    [data-testid="column"] {
+        min-width: 0;
+    }
+
+    @media (max-width: 900px) {
+        .block-container {
+            padding: 2.5rem 1rem 2rem 1rem !important;
+        }
+
+        .mot-section-header {
+            font-size: 1.05rem;
+        }
+
+        [data-testid="stMetric"] {
+            padding: 0.7rem;
+        }
     }
 </style>
 """,
@@ -660,12 +687,12 @@ if current_tab == nav_options[0]:
     st.markdown(f"<div class='mot-section-header'>{ui('12-Month Projected Volume Summary', 'សង្ខេបបរិមាណព្យាករណ៍រយៈពេល ១២ ខែ')}</div>", unsafe_allow_html=True)
 
     k1, k2, k3, k4 = st.columns(4)
-    k1.metric(ui("Cumulative Inbound", "ចំនួនភ្ញៀវសរុប"), f"{forecast_df['Tuned_Forecast'].sum():,.0f} Pax")
-    k2.metric(ui("Monthly Mean Rate", "អត្រាមធ្យមប្រចាំខែ"), f"{forecast_df['Tuned_Forecast'].mean():,.0f} Pax/mo")
+    k1.metric(ui("Cumulative inbound", "ចំនួនភ្ញៀវសរុប"), f"{forecast_df['Tuned_Forecast'].sum():,.0f} {ui('Pax', 'នាក់')}")
+    k2.metric(ui("Monthly mean rate", "អត្រាមធ្យមប្រចាំខែ"), f"{forecast_df['Tuned_Forecast'].mean():,.0f} {ui('Pax/mo', 'នាក់/ខែ')}")
     k3.metric(ui("Baseline Variance (Mean)", "គម្លាតមធ្យមពីមូលដ្ឋាន"), f"{forecast_df['Deviation_%'].mean():+.2f}%")
     k4.metric(
         ui("Critical Alert Months", "ចំនួនខែមានការព្រមាន"),
-        f"{(forecast_df['Clean_Status'] != 'Normal Demand (🟢)').sum()} / {len(forecast_df)} Months",
+        f"{(forecast_df['Clean_Status'] != 'Normal Demand (🟢)').sum()} / {len(forecast_df)} {ui('Months', 'ខែ')}",
     )
 
 # -------------------------------------------------------------------
