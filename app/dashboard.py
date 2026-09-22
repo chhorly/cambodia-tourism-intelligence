@@ -19,10 +19,10 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Kantumruy+Pro:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+Khmer:wght@400;500;600;700;800&display=swap');
     
     * { 
-        font-family: 'Inter', 'Kantumruy Pro', sans-serif;
+        font-family: 'Inter', 'Noto Sans Khmer', sans-serif;
         letter-spacing: -0.01em;
         
     }
@@ -32,12 +32,12 @@ st.markdown(
     }
 
     h1, h2, h3, h4, h5, h6 {
-        font-family: 'Inter', 'Kantumruy Pro', sans-serif !important;
+        font-family: 'Inter', 'Noto Sans Khmer', sans-serif !important;
         letter-spacing: -0.035em;
     }
 
     .stMarkdown, .stText, .stCaption, label, button, input, textarea {
-        font-family: 'Inter', 'Kantumruy Pro', sans-serif !important;
+        font-family: 'Inter', 'Noto Sans Khmer', sans-serif !important;
     }
     
     .block-container {
@@ -84,7 +84,7 @@ st.markdown(
     }
     
     .gov-title-khmer {
-        font-family: 'Kantumruy Pro', 'Inter', sans-serif;
+        font-family: 'Noto Sans Khmer', 'Inter', sans-serif;
         font-size: 1.1rem;
         font-weight: 700;
         color: #1e3a8a;
@@ -388,7 +388,7 @@ st.markdown(
 
     [data-testid="stMetricValue"] {
         color: #171827;
-        font-family: 'Inter', 'Kantumruy Pro', sans-serif !important;
+        font-family: 'Inter', 'Noto Sans Khmer', sans-serif !important;
         font-size: clamp(1.25rem, 2.35vw, 2rem);
         font-weight: 700;
         line-height: 1.15;
