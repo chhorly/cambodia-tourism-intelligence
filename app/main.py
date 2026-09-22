@@ -2,6 +2,7 @@ from datetime import date
 from typing import Any
 import os
 import joblib
+import numpy as np
 import pandas as pd
 from fastapi import FastAPI, Depends, HTTPException
 from pydantic import BaseModel, Field
@@ -26,11 +27,19 @@ except ModuleNotFoundError as e:
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_PATH = os.path.join(PROJECT_ROOT, "models", "cambodia_tourism_lgbm.pkl")
+if not os.path.exists(MODEL_PATH):
+    model_candidates = sorted(
+        os.path.join(PROJECT_ROOT, "models", name)
+        for name in os.listdir(os.path.join(PROJECT_ROOT, "models"))
+        if name.startswith("cambodia_tourism_lgbm") and name.endswith(".pkl")
+    )
+    if model_candidates:
+        MODEL_PATH = model_candidates[0]
 
 app = FastAPI(
     title="Cambodia Tourism Demand & Early Warning API",
     version="1.0.0",
-    description="Production REST API connecting PostgreSQL, LightGBM inference, and EWS alerts."
+    description="Production REST API connecting PostgreSQL, log-transformed LightGBM inference, and EWS alerts."
 )
 
 # Load serialized champion model artifact
@@ -39,13 +48,19 @@ try:
     if isinstance(artifact, dict):
         model = artifact["model"]
         feature_names = artifact.get("features", None)
+        # The Colab export stores only {"model", "features"}, but that model
+        # was trained on np.log1p(y). Keep it compatible with this API.
+        target_transform = artifact.get("target_transform", "log1p")
     else:
         model = artifact
         feature_names = [
             "Lag_1", "Lag_3", "Lag_12", "Rolling_3_Mean", "Rolling_12_Mean",
+            "Lag_1_to_Rolling_3", "Lag_1_to_Lag_12", "Rolling_3_to_12",
             "Average_Temperature", "Rainfall", "Cambodia_Holiday_Days",
-            "COVID_Indicator", "Month_Number", "Total_Origin_Holidays", "China_Holidays"
+            "COVID_Indicator", "Sin_Month", "Cos_Month", "Total_Origin_Holidays",
+            "China_Holidays"
         ]
+        target_transform = "none"
     print("✅ Model artifact loaded successfully.")
 except Exception as e:
     print(f"❌ Error loading model: {e}")
@@ -103,7 +118,16 @@ def get_forecasts(db: Any = Depends(get_db)):
     except Exception:
         pass
 
-    csv_path = os.path.join(PROJECT_ROOT, "data", "Cambodia_Tourism_Forecast_EWS.csv")
+    data_dir = os.path.join(PROJECT_ROOT, "data")
+    csv_path = os.path.join(data_dir, "Cambodia_Tourism_Forecast_EWS.csv")
+    if not os.path.exists(csv_path):
+        forecast_candidates = sorted(
+            os.path.join(data_dir, name)
+            for name in os.listdir(data_dir)
+            if name.startswith("Cambodia_Tourism_Forecast_EWS") and name.endswith(".csv")
+        )
+        if forecast_candidates:
+            csv_path = forecast_candidates[0]
     if os.path.exists(csv_path):
         df = pd.read_csv(csv_path)
         return df.to_dict(orient="records")
@@ -111,7 +135,7 @@ def get_forecasts(db: Any = Depends(get_db)):
 
 @app.post("/api/v1/predict", response_model=ForecastResponse, tags=["Forecasting"])
 def predict_and_store(payload: ForecastInput, db: Any = Depends(get_db)):
-    """Runs LightGBM inference, evaluates EWS threshold, and persists to DB."""
+    """Runs log-transformed LightGBM inference, evaluates EWS, and persists it."""
     if model is None:
         raise HTTPException(status_code=503, detail="Model is not available.")
 
@@ -119,8 +143,15 @@ def predict_and_store(payload: ForecastInput, db: Any = Depends(get_db)):
     pred_date = input_data.pop("date")
     baseline = input_data.pop("seasonal_baseline")
 
-    input_df = pd.DataFrame([input_data])[feature_names]
-    pred_val = float(model.predict(input_df)[0])
+    input_df = pd.DataFrame([input_data])
+    input_df["Lag_1_to_Rolling_3"] = input_df["Lag_1"] / input_df["Rolling_3_Mean"].replace(0, np.nan)
+    input_df["Lag_1_to_Lag_12"] = input_df["Lag_1"] / input_df["Lag_12"].replace(0, np.nan)
+    input_df["Rolling_3_to_12"] = input_df["Rolling_3_Mean"] / input_df["Rolling_12_Mean"].replace(0, np.nan)
+    input_df["Sin_Month"] = np.sin(2 * np.pi * input_df["Month_Number"] / 12)
+    input_df["Cos_Month"] = np.cos(2 * np.pi * input_df["Month_Number"] / 12)
+    pred_val = float(model.predict(input_df[feature_names])[0])
+    if target_transform == "log1p":
+        pred_val = max(0.0, float(np.expm1(pred_val)))
 
     dev_pct = ((pred_val - baseline) / baseline) * 100.0
     if dev_pct > 15.0:
@@ -137,7 +168,7 @@ def predict_and_store(payload: ForecastInput, db: Any = Depends(get_db)):
         if DATABASE_AVAILABLE:
             save_or_update_forecast(db, {
                 "date_id": pred_date,
-                "model_version": "Tuned_LightGBM_v1",
+                "model_version": "LogTransformed_LightGBM_v2",
                 "predicted_arrivals": round(pred_val),
                 "seasonal_baseline": round(baseline),
                 "deviation_pct": round(dev_pct, 2),

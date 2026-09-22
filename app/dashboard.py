@@ -1,5 +1,5 @@
 from pathlib import Path
-import json
+import joblib
 import numpy as np
 import pandas as pd
 import plotly.express as px
@@ -240,11 +240,72 @@ PROJECT_ROOT = (
 )
 FORECAST_PATH = PROJECT_ROOT / "data" / "Cambodia_Tourism_Forecast_EWS.csv"
 HISTORY_PATH = PROJECT_ROOT / "data" / "Cambodia_Tourism_Enriched.csv"
+MODEL_PATH = PROJECT_ROOT / "models" / "cambodia_tourism_lgbm.pkl"
+
+if not MODEL_PATH.exists():
+    model_candidates = sorted(
+        (PROJECT_ROOT / "models").glob("cambodia_tourism_lgbm*.pkl")
+    )
+    if model_candidates:
+        MODEL_PATH = model_candidates[0]
 
 if not FORECAST_PATH.exists():
-    FORECAST_PATH = Path("Cambodia_Tourism_Forecast_EWS.csv")
+    # Windows commonly appends " (3)" when a downloaded file is duplicated.
+    # Resolve that local copy without depending on Streamlit's working directory.
+    forecast_candidates = sorted(
+        (PROJECT_ROOT / "data").glob("Cambodia_Tourism_Forecast_EWS*.csv")
+    )
+    if forecast_candidates:
+        FORECAST_PATH = forecast_candidates[0]
 if not HISTORY_PATH.exists():
-    HISTORY_PATH = Path("Cambodia_Tourism_Enriched.csv")
+    history_candidates = sorted(
+        (PROJECT_ROOT / "data").glob("Cambodia_Tourism_Enriched*.csv")
+    )
+    if history_candidates:
+        HISTORY_PATH = history_candidates[0]
+
+model_metrics = {}
+model_artifact = None
+if MODEL_PATH.exists():
+    try:
+        model_artifact = joblib.load(MODEL_PATH)
+        model_metrics = model_artifact.get("metrics", {}) if isinstance(model_artifact, dict) else {}
+    except Exception:
+        model_metrics = {}
+
+if not model_metrics and model_artifact is not None and HISTORY_PATH.exists():
+    try:
+        # Colab's export contains only model/features, so calculate the same
+        # chronological test metrics instead of showing misleading N/A cards.
+        evaluation_df = pd.read_csv(HISTORY_PATH, parse_dates=["Date"]).sort_values("Date")
+        evaluation_df["Lag_1_to_Rolling_3"] = evaluation_df["Lag_1"] / (evaluation_df["Rolling_3_Mean"] + 1e-5)
+        evaluation_df["Lag_1_to_Lag_12"] = evaluation_df["Lag_1"] / (evaluation_df["Lag_12"] + 1e-5)
+        evaluation_df["Rolling_3_to_12"] = evaluation_df["Rolling_3_Mean"] / (evaluation_df["Rolling_12_Mean"] + 1e-5)
+        evaluation_df["Sin_Month"] = np.sin(2 * np.pi * evaluation_df["Month_Number"] / 12)
+        evaluation_df["Cos_Month"] = np.cos(2 * np.pi * evaluation_df["Month_Number"] / 12)
+        feature_names = model_artifact.get("features", [])
+        evaluation_df = evaluation_df.dropna(subset=feature_names + ["International_Tourist_Arrivals"])
+        test_df = evaluation_df[evaluation_df["Date"] >= "2025-07-01"]
+        if len(test_df):
+            predictions = model_artifact["model"].predict(test_df[feature_names])
+            if model_artifact.get("target_transform", "log1p") == "log1p":
+                predictions = np.expm1(predictions)
+            actuals = test_df["International_Tourist_Arrivals"].to_numpy()
+            residuals = actuals - predictions
+            model_metrics = {
+                "holdout_months": len(test_df),
+                "testing_observations": len(test_df),
+                "holdout_mape": float(np.mean(np.abs(residuals) / actuals)),
+                "holdout_r2": float(1 - (np.sum(residuals**2) / np.sum((actuals - actuals.mean()) ** 2))),
+            }
+    except Exception:
+        model_metrics = {}
+
+holdout_mape = model_metrics.get("holdout_mape")
+holdout_r2 = model_metrics.get("holdout_r2")
+holdout_months = model_metrics.get("holdout_months", 12)
+holdout_mape_text = f"{holdout_mape * 100:.1f}%" if holdout_mape is not None else "N/A"
+holdout_r2_text = f"{holdout_r2 * 100:.2f}%" if holdout_r2 is not None else "N/A"
 
 
 @st.cache_data
@@ -374,7 +435,7 @@ if current_tab == nav_options[0]:
             <div class="mot-hero-sub">{ui("Production Inferences & Predictive Intelligence", "ការព្យាករណ៍ផលិតកម្ម និងព័ត៌មានវៃឆ្លាត")}</div>
             <div class="mot-hero-title">{ui("National Demand Forecast System", "ប្រព័ន្ធព្យាករណ៍តម្រូវការទេសចរណ៍ជាតិ")}</div>
             <div class="mot-hero-desc">
-                {ui("Serving low-latency LightGBM regression inference to project national international tourist volumes. Trained on 186 chronological monthly records across 2011–2026, fused with climate covariates and national holiday signals.", "ប្រើប្រាស់ LightGBM ដើម្បីព្យាករណ៍ចំនួនភ្ញៀវទេសចរអន្តរជាតិប្រចាំជាតិ។ ម៉ូដែលបានបណ្តុះបណ្តាលលើទិន្នន័យប្រចាំខែចំនួន ១៨៦ ពីឆ្នាំ ២០១១–២០២៦ ដោយរួមបញ្ចូលអាកាសធាតុ និងថ្ងៃឈប់សម្រាកជាតិ។")}
+                {ui("Serving low-latency log-transformed LightGBM regression inference to project national international tourist volumes. Trained on 186 chronological monthly records across 2011–2026, fused with climate covariates and national holiday signals.", "ប្រើប្រាស់ LightGBM ដែលបានបម្លែងគោលដៅជា log ដើម្បីព្យាករណ៍ចំនួនភ្ញៀវទេសចរអន្តរជាតិប្រចាំជាតិ។ ម៉ូដែលបានបណ្តុះបណ្តាលលើទិន្នន័យប្រចាំខែចំនួន ១៨៦ ពីឆ្នាំ ២០១១–២០២៦ ដោយរួមបញ្ចូលអាកាសធាតុ និងថ្ងៃឈប់សម្រាកជាតិ។")}
             </div>
         </div>
         """,
@@ -389,30 +450,31 @@ if current_tab == nav_options[0]:
             """
             <div class="ds-card">
                 <div class="ds-card-title">Production Model</div>
-                <div class="ds-card-val">LightGBM</div>
-                <div class="ds-card-sub">Regressor • Leaf-wise GBDT</div>
+                <div class="ds-card-val">Log-LightGBM</div>
+                <div class="ds-card-sub">log1p target • expm1 output</div>
             </div>
             """,
             unsafe_allow_html=True,
         )
     with m2:
         st.markdown(
-            """
+            f"""
             <div class="ds-card">
                 <div class="ds-card-title">Holdout MAPE</div>
-                <div class="ds-card-val">32.9%</div>
-                <div class="ds-card-sub">Outperforms SARIMAX (39.7%)</div>
+                <div class="ds-card-val">{holdout_mape_text}</div>
+                <div class="ds-card-sub">Chronological {holdout_months}-month holdout</div>
             </div>
             """,
             unsafe_allow_html=True,
         )
     with m3:
+        r2_color = "#dc2626" if holdout_r2 is not None and holdout_r2 < 0 else "#0f172a"
         st.markdown(
-            """
+            f"""
             <div class="ds-card">
                 <div class="ds-card-title">Test Horizon R²</div>
-                <div class="ds-card-val">0.784</div>
-                <div class="ds-card-sub">24-Month Temporal Holdout</div>
+                <div class="ds-card-val" style="color: {r2_color};">{holdout_r2_text}</div>
+                <div class="ds-card-sub">{holdout_months}-month chronological test holdout</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -463,7 +525,7 @@ elif current_tab == nav_options[1]:
         go.Scatter(
             x=forecast_df["Date"],
             y=forecast_df["Tuned_Forecast"],
-            name="Tuned LightGBM Regressor (ŷt)",
+            name="Log-Transformed LightGBM Regressor (ŷt)",
             line=dict(color="#1d4ed8", width=3),
             mode="lines+markers",
         )
@@ -606,7 +668,7 @@ elif current_tab == nav_options[2]:
 # -------------------------------------------------------------------
 elif current_tab == nav_options[3]:
     st.markdown(f"<div class='mot-section-header'>{ui('Real-Time Feature Attribution Sandbox', 'ប្រព័ន្ធសាកល្បងសមាមាត្រលក្ខណៈពេលវេលាជាក់ស្តែង')}</div>", unsafe_allow_html=True)
-    st.caption(ui("Evaluates sensitivity against LightGBM inference endpoints to observe climate and origin holiday interactions.", "វាស់ស្ទង់ឥទ្ធិពលរបស់អាកាសធាតុ និងថ្ងៃឈប់សម្រាកប្រទេសដើមកំណើត តាមរយៈ LightGBM។"))
+    st.caption(ui("Evaluates sensitivity against log-transformed LightGBM inference endpoints to observe climate and origin holiday interactions.", "វាស់ស្ទង់ឥទ្ធិពលរបស់អាកាសធាតុ និងថ្ងៃឈប់សម្រាកប្រទេសដើមកំណើត តាមរយៈ LightGBM ដែលបានបម្លែងគោលដៅជា log។"))
 
     with st.form("simulation_form"):
         col_s1, col_s2, col_s3 = st.columns(3)
@@ -629,7 +691,7 @@ elif current_tab == nav_options[3]:
             sim_china_holidays = st.number_input(ui("China Holidays (Golden Week / Spring)", "ថ្ងៃឈប់សម្រាកចិន (Golden Week / បុណ្យចូលឆ្នាំ)"), min_value=0, max_value=10, value=1)
             sim_covid = st.selectbox(ui("Structural Shock (COVID Damping)", "ការរំខានរចនាសម្ព័ន្ធ (COVID)"), options=[0, 1], index=0)
 
-        dispatch_btn = st.form_submit_button(ui("⚡ Run LightGBM Inference", "⚡ ដំណើរការព្យាករណ៍ LightGBM"), use_container_width=True)
+        dispatch_btn = st.form_submit_button(ui("⚡ Run Log-LightGBM Inference", "⚡ ដំណើរការព្យាករណ៍ Log-LightGBM"), use_container_width=True)
 
     if dispatch_btn:
         payload = {
