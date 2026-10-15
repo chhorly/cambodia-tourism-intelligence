@@ -1,17 +1,15 @@
-version: '3.8'
-
 x-airflow-common: &airflow-common
   image: apache/airflow:2.8.1-python3.10
   environment:
     - AIRFLOW__CORE__EXECUTOR=LocalExecutor
     - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres-airflow:5432/airflow
     - AIRFLOW__CORE__LOAD_EXAMPLES=False
-    - AIRFLOW__CORE__LOGGING_LEVEL=INFO
-    - DATABASE_URL=postgresql://postgres:postgres@cambodia-postgres:5432/tourism_db
+    - AIRFLOW__LOGGING__LOGGING_LEVEL=INFO
+    - DATABASE_URL=postgresql://airflow:airflow@postgres-airflow:5432/airflowp
   volumes:
     - ./dags:/opt/airflow/dags
     - ./data:/opt/airflow/data
-    - ./logs:/opt/airflow/logs
+    - airflow-logs:/opt/airflow/logs
   user: "${AIRFLOW_UID:-50000}:0"
 
 services:
@@ -23,17 +21,21 @@ services:
       - POSTGRES_DB=airflow
     volumes:
       - airflow-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "airflow"]
+      interval: 5s
+      retries: 5
 
   airflow-init:
     <<: *airflow-common
-    command: version
-    environment:
-      - _AIRFLOW_DB_MIGRATE=true
-      - _AIRFLOW_WWW_USER_CREATE=true
-      - _AIRFLOW_WWW_USER_USERNAME=admin
-      - _AIRFLOW_WWW_USER_PASSWORD=admin
+    command: >
+      bash -c "
+      airflow db migrate &&
+      airflow users create --role Admin --username admin --password admin --firstname Admin --lastname User --email admin@example.com || true
+      "
     depends_on:
-      - postgres-airflow
+      postgres-airflow:
+        condition: service_healthy
 
   airflow-webserver:
     <<: *airflow-common
@@ -41,15 +43,18 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - airflow-init
+      airflow-init:
+        condition: service_completed_successfully
     restart: always
 
   airflow-scheduler:
     <<: *airflow-common
     command: scheduler
     depends_on:
-      - airflow-init
+      airflow-init:
+        condition: service_completed_successfully
     restart: always
 
 volumes:
   airflow-postgres-data:
+  airflow-logs:

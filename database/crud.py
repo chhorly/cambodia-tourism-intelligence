@@ -1,4 +1,3 @@
-from datetime import date
 from sqlalchemy import Column, Date, Float, Integer, String
 from database.connection import Base
 
@@ -7,7 +6,7 @@ class ForecastRecord(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     date_id = Column(Date, unique=True, nullable=False, index=True)
-    model_version = Column(String, default="Tuned_LightGBM_v1")
+    model_version = Column(String, default="LogTransformed_LightGBM_v2")
     actual_arrivals = Column(Integer, nullable=True)
     predicted_arrivals = Column(Integer, nullable=False)
     seasonal_baseline = Column(Integer, nullable=False)

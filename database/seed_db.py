@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 import pandas as pd
 from database.connection import Base, engine, SessionLocal
@@ -13,8 +12,14 @@ def seed():
     root = Path(__file__).resolve().parents[1]
     csv_path = root / "data" / "Cambodia_Tourism_Forecast_EWS.csv"
     if not csv_path.exists():
-        print(f"❌ Cannot find {csv_path}")
-        return
+        forecast_candidates = sorted(
+            csv_path.parent.glob("Cambodia_Tourism_Forecast_EWS*.csv")
+        )
+        if forecast_candidates:
+            csv_path = forecast_candidates[0]
+        else:
+            print(f"❌ Cannot find forecast CSV in {csv_path.parent}")
+            return
 
     df = pd.read_csv(csv_path)
     df.columns = df.columns.str.strip()
@@ -28,7 +33,7 @@ def seed():
             if not existing:
                 record = ForecastRecord(
                     date_id=d_val,
-                    model_version="Tuned_LightGBM_v1",
+                    model_version="LogTransformed_LightGBM_v2",
                     actual_arrivals=int(row["Actual_Arrivals"]) if pd.notna(row.get("Actual_Arrivals")) else None,
                     predicted_arrivals=int(round(float(row["Tuned_Forecast"]))),
                     seasonal_baseline=int(round(float(row["Seasonal_Baseline"]))),

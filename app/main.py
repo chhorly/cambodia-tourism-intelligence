@@ -39,7 +39,7 @@ if not os.path.exists(MODEL_PATH):
 app = FastAPI(
     title="Cambodia Tourism Demand & Early Warning API",
     version="1.0.0",
-    description="Production REST API connecting PostgreSQL, log-transformed LightGBM inference, and EWS alerts."
+    description="Production REST API connecting PostgreSQL, LightGBM inference, and EWS alerts."
 )
 
 # Load serialized champion model artifact
@@ -48,9 +48,9 @@ try:
     if isinstance(artifact, dict):
         model = artifact["model"]
         feature_names = artifact.get("features", None)
-        # The Colab export stores only {"model", "features"}, but that model
-        # was trained on np.log1p(y). Keep it compatible with this API.
-        target_transform = artifact.get("target_transform", "log1p")
+        # Legacy artifacts without transform metadata return arrival counts
+        # directly. New log-transformed artifacts declare their transform.
+        target_transform = artifact.get("target_transform", "none")
     else:
         model = artifact
         feature_names = [

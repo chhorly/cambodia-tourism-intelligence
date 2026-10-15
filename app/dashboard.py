@@ -12,410 +12,562 @@ st.set_page_config(
     page_title="MoT Predictive Analytics & Early Warning Platform",
     page_icon="🇰🇭",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 # 2. Enterprise Government MLOps Theme (Clean & Responsive)
 st.markdown(
     """
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+Khmer:wght@400;500;600;700;800&display=swap');
-    
-    * { 
-        font-family: 'Inter', 'Noto Sans Khmer', sans-serif;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Kantumruy+Pro:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;500;600;700;800&display=swap');
+
+    * {
+        font-family: 'Inter', 'Kantumruy Pro', 'Noto Sans Khmer', sans-serif;
         letter-spacing: -0.01em;
-        
     }
-    
+
     code, pre, .mono {
         font-family: 'JetBrains Mono', monospace !important;
     }
 
     h1, h2, h3, h4, h5, h6 {
-        font-family: 'Inter', 'Noto Sans Khmer', sans-serif !important;
+        font-family: 'Inter', 'Kantumruy Pro', 'Noto Sans Khmer', sans-serif !important;
         letter-spacing: -0.035em;
     }
 
-    .stMarkdown, .stText, .stCaption, label, button, input, textarea {
-        font-family: 'Inter', 'Noto Sans Khmer', sans-serif !important;
-    }
-    
-    .block-container {
-        /* Leave enough room for Streamlit Cloud's fixed top toolbar. */
-        padding: 8rem 1.5rem 2.5rem 1.5rem !important;
-        max-width: 100%; 
+    .js-plotly-plot .xtick text,
+    .js-plotly-plot .ytick text,
+    .js-plotly-plot .g-xtitle text,
+    .js-plotly-plot .g-ytitle text {
+        font-weight: 700 !important;
     }
 
-    /* Government Header Bar */
+    .stApp {
+        background: #f3f6f5;
+        color: #0f172a;
+    }
+
+    .block-container {
+        padding: 4.5rem 1.5rem 2.4rem !important;
+        max-width: 1280px;
+    }
+
+    .stMarkdown, .stText, .stCaption, label, button, input, textarea, .stSelectbox {
+        font-family: 'Inter', 'Kantumruy Pro', 'Noto Sans Khmer', sans-serif !important;
+    }
+
+    div[data-testid="stRadio"] > div {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    div[data-testid="stRadio"] label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #0f172a;
+        font-size: 1rem;
+        font-weight: 600;
+        padding: 0.2rem 0.35rem;
+    }
+
+    div[data-testid="stRadio"] input[type="radio"] {
+        accent-color: #1d4ed8;
+        width: 1.1rem;
+        height: 1.1rem;
+    }
+
+    div[data-testid="stSelectbox"] > div {
+        background: rgba(255,255,255,0.9);
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    }
+
     .gov-navbar {
         display: flex;
-        flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        padding-bottom: 0.8rem;
-        border-bottom: 2px solid #e2e8f0;
-        margin-bottom: 1rem;
         gap: 1rem;
         flex-wrap: wrap;
+        padding: 0.8rem 1rem 0.9rem;
+        margin-bottom: 1rem;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.97);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
     }
-    
+
+    .left-selector {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        height: 42px;
+        padding: 0 0.8rem;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.78);
+        color: #111827;
+        font-size: 1rem;
+        font-weight: 600;
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.25);
+    }
+
+    .left-selector-icon {
+        display: inline-flex;
+        width: 20px;
+        height: 20px;
+        border-radius: 4px;
+        background: linear-gradient(180deg, #8b5cf6 0%, #3b82f6 100%);
+        box-shadow: inset 0 0 0 2px rgba(255,255,255,0.8);
+    }
+
+    .left-selector-arrow {
+        margin-left: auto;
+        color: #374151;
+        font-size: 1rem;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.55rem;
+        margin-top: 0.8rem;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label {
+        display: flex;
+        box-sizing: border-box;
+        align-items: center;
+        gap: 0.75rem;
+        width: 100%;
+        min-height: 52px;
+        padding: 0.75rem 0.7rem;
+        border-radius: 16px;
+        font-size: 1.04rem;
+        color: #374151;
+        background: rgba(255,255,255,0.2);
+        border: 1px solid #d9e0e8;
+        box-shadow: none;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label p {
+        margin: 0;
+        color: #4b5563;
+        font-family: 'Kantumruy Pro', 'Noto Sans Khmer', sans-serif !important;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: 1.4;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) {
+        background: #f7f8fb;
+        border-color: #9bb0ff;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) p {
+        color: #1f2937;
+        font-weight: 700;
+    }
+
+    [data-testid="stSidebar"] [data-testid="stRadio"] [role="radiogroup"] input[type="radio"] {
+        accent-color: #e45d57;
+        flex: 0 0 1.1rem;
+        width: 1.1rem;
+        height: 1.1rem;
+        margin: 0;
+    }
+
     .gov-brand {
         display: flex;
         align-items: center;
         gap: 0.8rem;
     }
-    
+
     .gov-emblem-badge {
         display: flex;
         align-items: center;
         justify-content: center;
         width: 44px;
         height: 44px;
-        background: #1e3a8a;
-        color: #facc15;
-        font-size: 1.5rem;
         border-radius: 10px;
-        box-shadow: 0 2px 6px rgba(30, 58, 138, 0.25);
+        background: linear-gradient(135deg, #1d4ed8 0%, #1e3a8a 100%);
+        color: #facc15;
+        font-size: 1.3rem;
+        box-shadow: 0 6px 14px rgba(30, 58, 138, 0.18);
     }
-    
+
     .gov-titles {
         display: flex;
         flex-direction: column;
     }
-    
+
     .gov-title-khmer {
-        font-family: 'Noto Sans Khmer', 'Inter', sans-serif;
-        font-size: 1.1rem;
-        font-weight: 700;
         color: #1e3a8a;
-        line-height: 1.15;
-        min-height: 1.3em;
+        font-family: 'Kantumruy Pro', 'Noto Sans Khmer', 'Inter', sans-serif;
+        font-size: 1.05rem;
+        font-weight: 700;
+        line-height: 1.2;
     }
-    
+
     .gov-title-en {
-        font-size: 0.7rem;
+        color: #475569;
+        font-size: 0.72rem;
         font-weight: 700;
         letter-spacing: 0.08em;
-        color: #64748b;
         text-transform: uppercase;
     }
-    
+
     .mlops-status-pill {
-        background: #f8fafc;
-        border: 1px solid #cbd5e1;
-        padding: 4px 10px;
+        background: #e0f2fe;
+        border: 1px solid #93c5fd;
         border-radius: 9999px;
+        padding: 5px 12px;
+        color: #1d4ed8;
         font-size: 0.72rem;
         font-weight: 700;
         font-family: 'JetBrains Mono', monospace;
-        color: #334155;
     }
 
-    /* Hero Banner with Angkor Backdrop */
     .mot-hero {
         position: relative;
-        border-radius: 16px;
-        padding: 2.5rem 1.8rem;
-        color: white;
+        border-radius: 18px;
+        padding: 2.1rem 1.6rem;
         margin-bottom: 1.5rem;
-        background: linear-gradient(180deg, rgba(15, 23, 42, 0.6) 0%, rgba(15, 23, 42, 0.9) 100%),
+        color: white;
+        background: linear-gradient(135deg, rgba(15, 23, 42, 0.82) 0%, rgba(30, 58, 138, 0.72) 100%),
                     url('https://images.unsplash.com/photo-1569154941061-e231b4725ef1?q=80&w=1600&auto=format&fit=crop');
         background-size: cover;
         background-position: center;
-        box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.2);
-    }
-    
-    .mot-hero-sub {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #93c5fd;
-        margin-bottom: 0.25rem;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-    }
-    
-    .mot-hero-title {
-        font-size: 1.85rem;
-        font-weight: 700;
-        letter-spacing: -0.045em;
-        color: #facc15;
-        line-height: 1.3;
-        margin-bottom: 0.6rem;
-    }
-    
-    .mot-hero-desc {
-        font-size: 0.88rem;
-        color: #e2e8f0;
-        max-width: 820px;
-        line-height: 1.55;
+        border: 1px solid rgba(148, 163, 184, 0.2);
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
     }
 
-    /* Section Headings with Gold Underline */
-    .mot-section-header {
-        font-size: 1.2rem;
+    .mot-hero-sub {
+        font-size: 0.78rem;
         font-weight: 700;
-        letter-spacing: -0.035em;
-        color: #1e3a8a;
-        margin: 1.2rem 0 0.8rem 0;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #bfdbfe;
+        margin-bottom: 0.35rem;
+    }
+
+    .mot-hero-title {
+        font-size: 1.9rem;
+        font-weight: 800;
+        letter-spacing: -0.045em;
+        color: #f8fafc;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+    }
+
+    .mot-hero-desc {
+        max-width: 820px;
+        font-size: 0.88rem;
+        line-height: 1.6;
+        color: #e2e8f0;
+    }
+
+    .mot-section-header {
         display: inline-block;
+        margin: 1.1rem 0 0.8rem;
+        color: #0f172a;
+        font-size: 1.15rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
         position: relative;
     }
-    
+
     .mot-section-header::after {
         content: "";
         display: block;
-        width: 38px;
-        height: 3px;
-        background: #d97706;
+        width: 44px;
+        height: 4px;
+        margin-top: 5px;
         border-radius: 2px;
-        margin-top: 4px;
+        background: #22c55e;
     }
 
-    /* MLOps Card Containers */
-    .ds-card {
-        background: white;
+    .summary-card {
+        padding: 18px 20px;
+        min-height: 150px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .metric-card-white {
+        background: #ffffff;
         border: 1px solid #e2e8f0;
+        border-top: 4px solid #2ca02c;
         border-radius: 12px;
-        padding: 1.1rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-        border-top: 3.5px solid #1e3a8a;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+    }
+
+    .summary-row {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.2rem;
+        width: 100%;
+    }
+
+    .summary-measure {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 0.35rem;
+        max-width: 100%;
+        white-space: nowrap;
+    }
+
+    .summary-label {
+        color: #475569;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        line-height: 1.3;
+    }
+
+    .summary-value {
+        color: #0f172a;
+        font-size: clamp(1.05rem, 1.7vw, 1.75rem);
+        font-weight: 800;
+        letter-spacing: -0.035em;
+        line-height: 1.08;
+        white-space: nowrap;
+        font-family: 'Inter', 'Kantumruy Pro', 'Noto Sans Khmer', sans-serif;
+    }
+
+    .summary-sub {
+        margin-top: 0;
+        color: #0f766e;
+        font-size: 0.72rem;
+        font-weight: 700;
+    }
+
+    .summary-details {
+        margin-top: 0.55rem;
+        color: #475569;
+        font-size: 0.68rem;
+        line-height: 1.5;
+    }
+
+    .summary-details strong {
+        color: #334155;
+    }
+
+    .gov-footer {
+        max-width: 100%;
+        margin: 2rem auto 0;
+        padding: 1rem 0 0.4rem;
+        border-top: 1px solid #dbe3e8;
+        color: #64748b;
+        font-size: 0.82rem;
+        line-height: 1.6;
+        text-align: center;
+    }
+
+    .gov-footer strong {
+        color: #334155;
+        font-size: 0.86rem;
+    }
+
+    .ds-card {
+        padding: 22px;
+        min-height: 205px;
+        height: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
         margin-bottom: 0.75rem;
     }
-    
-    .ds-card-title {
-        font-size: 0.78rem;
-        font-weight: 700;
-        color: #64748b;
-        text-transform: uppercase;
-        margin-bottom: 0.3rem;
-    }
-    
-    .ds-card-val {
-        font-size: 1.45rem;
-        font-weight: 700;
-        letter-spacing: -0.025em;
-        color: #0f172a;
-        font-family: 'JetBrains Mono', monospace;
-    }
-    
-    .ds-card-sub {
-        font-size: 0.74rem;
-        color: #059669;
-        font-weight: 600;
-        margin-top: 0.2rem;
+
+    .trust-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 25px;
     }
 
-    /* Mobile Responsive Optimizations */
-    @media (max-width: 768px) {
-        .block-container {
-            padding: 6.5rem 0.8rem 2rem 0.8rem !important;
-        }
-        .gov-navbar {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.5rem;
-        }
-        .mot-hero {
-            padding: 1.6rem 1.1rem !important;
-            border-radius: 12px;
-        }
-        .mot-hero-title {
-            font-size: 1.35rem !important;
-        }
-        .mot-hero-desc {
-            font-size: 0.8rem !important;
-        }
-        .ds-card-val {
-            font-size: 1.25rem !important;
-        }
-    }
-
-    /* Footer */
-    .gov-footer {
-        border-top: 1px solid #e2e8f0;
-        padding: 1.8rem 0;
-        margin-top: 3rem;
-        text-align: center;
-        color: #64748b;
-        font-size: 0.8rem;
-        line-height: 1.6;
-    }
-
-    /* Reference UI direction: airy travel dashboard with emerald actions. */
-    .stApp {
-        background: #edf7fc;
-        color: #171827;
-    }
-
-    .block-container {
-        padding: 3.5rem 2rem 2.5rem 2rem !important;
-        max-width: 1500px;
-    }
-
-    .gov-navbar {
-        background: rgba(255, 255, 255, 0.94);
-        border: 1px solid #e5edf3;
-        border-bottom: 1px solid #e5edf3;
-        border-radius: 18px;
-        padding: 0.85rem 1rem;
-        margin-bottom: 1.1rem;
-        box-shadow: 0 8px 24px rgba(31, 55, 79, 0.06);
-    }
-
-    .gov-emblem-badge {
-        width: 42px;
-        height: 42px;
-        background: #17b978;
-        color: white;
+    .trust-card {
+        background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
+        border: 1px solid #334155;
+        border-top: 4px solid #38bdf8;
         border-radius: 12px;
-        box-shadow: none;
+        padding: 18px;
+        color: #ffffff;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    .gov-title-khmer {
-        color: #171827;
+    .trust-card-green {
+        border-top-color: #4ade80;
+    }
+
+    .trust-card-warning {
+        border-top-color: #f87171;
+    }
+
+    .trust-card-caution {
+        border-top-color: #fbbf24;
+    }
+
+    .trust-card-offline {
+        border-top-color: #fbbf24;
+    }
+
+    .trust-card .ds-card-val {
+        font-size: clamp(1rem, 2vw, 1.25rem);
+        line-height: 1.35;
+        overflow-wrap: anywhere;
+    }
+
+    .trust-card .ds-card-title {
+        color: #94a3b8;
+        font-size: 0.75rem;
+        letter-spacing: 0;
+        text-transform: none;
+    }
+
+    .trust-card .ds-card-sub {
+        color: #38bdf8;
+        font-size: 0.7rem;
+    }
+
+    .trust-card .metric-value-model {
+        white-space: nowrap;
+    }
+
+    .trust-card .metric-value-warning {
+        color: #f87171 !important;
+        font-size: 1rem;
+    }
+
+    .trust-card .metric-value-ok {
+        color: #4ade80 !important;
+    }
+
+    .trust-card .metric-value-offline {
+        color: #fbbf24 !important;
+        font-size: 1rem;
+    }
+
+    .trust-grid .ds-card {
+        min-width: 0;
+        min-height: 0;
+        height: auto;
+        margin-bottom: 0;
+        padding: 18px;
+    }
+
+    @media (min-width: 768px) {
+        .trust-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 420px) {
+        .trust-grid .ds-card {
+            padding: 14px;
+        }
+
+        .trust-card .ds-card-val {
+            font-size: 1rem;
+        }
+    }
+
+    .ds-card-title {
+        margin-bottom: 0.35rem;
+        color: rgba(255,255,255,0.82);
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .ds-card-val {
+        color: #f8fafc;
+        font-family: 'Inter', 'Kantumruy Pro', 'Noto Sans Khmer', sans-serif;
+        font-size: clamp(1.15rem, 2vw, 1.7rem);
         font-weight: 800;
+        line-height: 1.25;
+        letter-spacing: 0;
+        overflow-wrap: anywhere;
+    }
+
+    .ds-card-sub {
+        margin-top: 0.25rem;
+        color: #a7f3d0;
+        font-size: 0.74rem;
+        font-weight: 700;
         line-height: 1.45;
     }
 
-    .gov-title-en {
-        color: #7a8392;
-        letter-spacing: 0.05em;
+    [data-testid="stMetric"] {
+        background: rgba(255,255,255,0.72);
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 0.8rem 0.9rem;
     }
 
-    .mlops-status-pill {
-        background: #f1fbf6;
-        border-color: #c6f0da;
-        color: #159b64;
+    [data-testid="stMetricLabel"] {
+        color: #475569;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
     }
 
-    .mot-hero {
-        background: linear-gradient(135deg, #ffffff 0%, #f5fbff 100%);
-        border: 1px solid #e2edf3;
-        color: #171827;
-        border-radius: 22px;
-        padding: 2rem 1.8rem;
-        box-shadow: 0 12px 28px rgba(31, 55, 79, 0.08);
-    }
-
-    .mot-hero-sub {
-        color: #17a96d;
-        font-size: 0.74rem;
-        letter-spacing: 0.08em;
-    }
-
-    .mot-hero-title {
-        color: #171827;
-        font-size: 2rem;
-    }
-
-    .mot-hero-desc {
-        color: #6f7785;
-        line-height: 1.7;
-        max-width: 760px;
-    }
-
-    .mot-section-header {
-        color: #171827;
-        margin-top: 1rem;
-    }
-
-    .mot-section-header::after {
-        background: #18b978;
-        height: 4px;
-    }
-
-    .ds-card {
-        border: 1px solid #e4edf2;
-        border-top: 0;
-        border-radius: 18px;
-        padding: 1.15rem;
-        box-shadow: 0 7px 18px rgba(31, 55, 79, 0.06);
-    }
-
-    .ds-card-title {
-        color: #778292;
-        letter-spacing: 0.02em;
-    }
-
-    .ds-card-val {
-        color: #171827;
-    }
-
-    .ds-card-sub {
-        color: #18a86d;
-        line-height: 1.55;
-    }
-
-    div[data-baseweb="select"] > div {
-        background: white;
-        border: 1px solid #e2edf3;
-        border-radius: 14px;
-        box-shadow: 0 5px 14px rgba(31, 55, 79, 0.05);
+    [data-testid="stMetricValue"] {
+        color: #0f172a;
+        font-family: 'Inter', 'Kantumruy Pro', 'Noto Sans Khmer', sans-serif !important;
+        font-size: clamp(1.25rem, 2.25vw, 2rem);
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: -0.04em;
     }
 
     .stButton > button,
     .stFormSubmitButton > button {
-        background: #18b978;
+        background: #1d4ed8;
         border: 0;
         border-radius: 12px;
         color: white;
         font-weight: 700;
-        box-shadow: 0 5px 12px rgba(24, 185, 120, 0.2);
+        box-shadow: 0 5px 12px rgba(29, 78, 216, 0.2);
     }
 
     .stButton > button:hover,
     .stFormSubmitButton > button:hover {
-        background: #119d65;
-        border: 0;
+        background: #1e3a8a;
         color: white;
     }
 
-    [data-testid="stMetric"] {
-        background: rgba(255, 255, 255, 0.72);
-        border: 1px solid #e4edf2;
-        border-radius: 16px;
-        padding: 0.85rem 1rem;
-    }
-
-    [data-testid="stMetricLabel"] {
-        color: #778292;
-        font-size: clamp(0.68rem, 0.95vw, 0.86rem);
-        font-weight: 600;
-        line-height: 1.45;
-        white-space: normal;
-        max-width: 18rem;
-    }
-
-    [data-testid="stMetricValue"] {
-        color: #171827;
-        font-family: 'Inter', 'Noto Sans Khmer', sans-serif !important;
-        font-size: clamp(1.25rem, 2.35vw, 2rem);
-        font-weight: 700;
-        line-height: 1.15;
-        letter-spacing: -0.04em;
-        white-space: normal;
-        overflow-wrap: normal;
-    }
-
-    [data-testid="column"] {
-        min-width: 0;
-    }
-
-    @media (max-width: 900px) {
+    @media (max-width: 768px) {
         .block-container {
-            padding: 2.5rem 1rem 2rem 1rem !important;
+            padding: 5rem 0.8rem 2rem !important;
         }
 
-        .mot-section-header {
-            font-size: 1.05rem;
+        .gov-navbar {
+            flex-direction: column;
+            align-items: flex-start;
         }
 
-        [data-testid="stMetric"] {
-            padding: 0.65rem;
+        .mot-hero {
+            padding: 1.4rem 1.1rem;
+            border-radius: 14px;
         }
 
-        [data-testid="stMetricValue"] {
-            font-size: clamp(1.1rem, 5vw, 1.55rem);
+        .mot-hero-title {
+            font-size: 1.5rem !important;
+        }
+
+        .summary-card {
+            min-height: 145px;
         }
     }
 </style>
@@ -466,8 +618,8 @@ if MODEL_PATH.exists():
 
 if not model_metrics and model_artifact is not None and HISTORY_PATH.exists():
     try:
-        # Colab's export contains only model/features, so calculate the same
-        # chronological test metrics instead of showing misleading N/A cards.
+        # Legacy artifacts without transform metadata return arrival counts
+        # directly. New log-transformed artifacts declare their transform.
         evaluation_df = pd.read_csv(HISTORY_PATH, parse_dates=["Date"]).sort_values("Date")
         evaluation_df["Lag_1_to_Rolling_3"] = evaluation_df["Lag_1"] / (evaluation_df["Rolling_3_Mean"] + 1e-5)
         evaluation_df["Lag_1_to_Lag_12"] = evaluation_df["Lag_1"] / (evaluation_df["Lag_12"] + 1e-5)
@@ -479,7 +631,7 @@ if not model_metrics and model_artifact is not None and HISTORY_PATH.exists():
         test_df = evaluation_df[evaluation_df["Date"] >= "2025-07-01"]
         if len(test_df):
             predictions = model_artifact["model"].predict(test_df[feature_names])
-            if model_artifact.get("target_transform", "log1p") == "log1p":
+            if model_artifact.get("target_transform", "none") == "log1p":
                 predictions = np.expm1(predictions)
             actuals = test_df["International_Tourist_Arrivals"].to_numpy()
             residuals = actuals - predictions
@@ -495,13 +647,19 @@ if not model_metrics and model_artifact is not None and HISTORY_PATH.exists():
 holdout_mape = model_metrics.get("holdout_mape")
 holdout_r2 = model_metrics.get("holdout_r2")
 holdout_months = model_metrics.get("holdout_months", 12)
-holdout_mape_text = f"{holdout_mape * 100:.1f}%" if holdout_mape is not None else "N/A"
+holdout_mape_text = f"{holdout_mape * 100:.2f}%" if holdout_mape is not None else "N/A"
 holdout_r2_text = f"{holdout_r2 * 100:.2f}%" if holdout_r2 is not None else "N/A"
+
+is_khmer = True
+
+
+def ui(english, khmer):
+    return khmer if is_khmer else english
 
 
 @st.cache_data
-def load_datasets():
-    forecast = pd.read_csv(FORECAST_PATH, parse_dates=["Date"])
+def load_datasets(forecast_path: Path, history_path: Path):
+    forecast = pd.read_csv(forecast_path, parse_dates=["Date"])
     forecast.columns = forecast.columns.str.strip()
 
     num_cols = [
@@ -538,15 +696,180 @@ def load_datasets():
     forecast["Operational_Action"] = forecast["Clean_Status"].apply(assign_action)
 
     history = pd.DataFrame()
-    if HISTORY_PATH.exists():
-        history = pd.read_csv(HISTORY_PATH, parse_dates=["Date"])
+    if history_path.exists():
+        history = pd.read_csv(history_path, parse_dates=["Date"])
         history.columns = history.columns.str.strip()
+
+    model_features = (
+        model_artifact.get("features", [])
+        if isinstance(model_artifact, dict)
+        else []
+    )
+    for column, numerator, denominator in [
+        ("Lag_1_to_Rolling_3", "Lag_1", "Rolling_3_Mean"),
+        ("Lag_1_to_Lag_12", "Lag_1", "Lag_12"),
+        ("Rolling_3_to_12", "Rolling_3_Mean", "Rolling_12_Mean"),
+    ]:
+        if numerator in history.columns and denominator in history.columns:
+            history[column] = history[numerator] / (history[denominator] + 1e-5)
+    if "Month_Number" in history.columns:
+        history["Sin_Month"] = np.sin(2 * np.pi * history["Month_Number"] / 12)
+        history["Cos_Month"] = np.cos(2 * np.pi * history["Month_Number"] / 12)
+
+    context_columns = [
+        "Lag_1",
+        "Lag_3",
+        "Lag_12",
+        "Rolling_3_Mean",
+        "Rolling_12_Mean",
+        "Average_Temperature",
+        "Rainfall",
+        "Cambodia_Holiday_Days",
+        "Total_Origin_Holidays",
+        "China_Holidays",
+        *model_features,
+    ]
+    available_context = list(
+        dict.fromkeys(
+            column
+            for column in context_columns
+            if column in history.columns and column != "Month_Number"
+        )
+    )
+    if available_context:
+        forecast = forecast.merge(
+            history[["Date", *available_context]],
+            on="Date",
+            how="left",
+            validate="many_to_one",
+        )
+
+    if "Sin_Month" in model_features and "Month_Number" in forecast.columns:
+        forecast["Sin_Month"] = np.sin(2 * np.pi * forecast["Month_Number"] / 12)
+    if "Cos_Month" in model_features and "Month_Number" in forecast.columns:
+        forecast["Cos_Month"] = np.cos(2 * np.pi * forecast["Month_Number"] / 12)
+
+    contribution_columns = {}
+    if model_features and all(feature in forecast.columns for feature in model_features):
+        model_inputs = forecast[model_features].apply(pd.to_numeric, errors="coerce")
+        if model_inputs.notna().all().all():
+            contributions = model_artifact["model"].predict(
+                model_inputs,
+                pred_contrib=True,
+            )
+            if contributions.shape != (len(forecast), len(model_features) + 1):
+                raise ValueError("Model returned unexpected feature contribution dimensions.")
+            for index, feature in enumerate(model_features):
+                contribution_column = f"_contribution_{feature}"
+                forecast[contribution_column] = contributions[:, index]
+                contribution_columns[feature] = contribution_column
+
+    def explain_alert(row):
+        deviation = row["Deviation_%"]
+        if pd.isna(deviation):
+            level_reason = ui("Alert unavailable", "គ្មានការព្រមាន")
+        elif deviation > 15:
+            level_reason = ui(
+                f"High {deviation:+.1f}% (>+15%)",
+                f"ខ្ពស់ {deviation:+.1f}% (>+15%)",
+            )
+        elif deviation < -15:
+            level_reason = ui(
+                f"Low {deviation:+.1f}% (<-15%)",
+                f"ទាប {deviation:+.1f}% (<-15%)",
+            )
+        else:
+            level_reason = ui(
+                f"Normal {deviation:+.1f}% (-15% to +15%)",
+                f"ធម្មតា {deviation:+.1f}% (-15% ដល់ +15%)",
+            )
+
+        driver_context = []
+        if contribution_columns:
+            ranked_features = sorted(
+                contribution_columns,
+                key=lambda feature: abs(row[contribution_columns[feature]]),
+                reverse=True,
+            )
+            feature_labels = {
+                "Lag_1": ("L1", "ខែមុន"),
+                "Lag_3": ("L3", "៣ខែមុន"),
+                "Lag_12": ("L12", "ឆ្នាំមុន"),
+                "Rolling_3_Mean": ("R3", "មធ្យម៣"),
+                "Rolling_12_Mean": ("R12", "មធ្យម១២"),
+                "Lag_1_to_Rolling_3": ("Ratio", "សមាមាត្រ"),
+                "Lag_1_to_Lag_12": ("YoY", "ធៀបឆ្នាំមុន"),
+                "Rolling_3_to_12": ("R3/12", "សមាមាត្រ៣/១២"),
+                "Average_Temperature": ("Temp", "សីតុណ្ហភាព"),
+                "Rainfall": ("Rain", "ភ្លៀង"),
+                "Cambodia_Holiday_Days": ("KH hol", "ឈប់សម្រាកខ្មែរ"),
+                "COVID_Indicator": ("COVID", "COVID"),
+                "Sin_Month": ("Season", "រដូវកាល"),
+                "Cos_Month": ("Season", "រដូវកាល"),
+                "Total_Origin_Holidays": ("Origin hol", "ឈប់សម្រាកប្រទេសដើម"),
+                "China_Holidays": ("China hol", "ឈប់សម្រាកចិន"),
+            }
+            top_features = ranked_features[:3]
+            for feature in top_features:
+                contribution = row[contribution_columns[feature]]
+                direction = "+" if contribution > 1e-9 else ""
+                english_label, khmer_label = feature_labels.get(
+                    feature,
+                    (feature.replace("_", " "), feature.replace("_", " ")),
+                )
+                driver_context.append(
+                    ui(
+                        f"{english_label} {direction}{contribution:.2f}",
+                        f"{khmer_label} {direction}{contribution:.2f}",
+                    )
+                )
+
+        rainfall = row.get("Rainfall")
+        temperature = row.get("Average_Temperature")
+        khmer_holidays = row.get("Cambodia_Holiday_Days")
+        origin_holidays = row.get("Total_Origin_Holidays")
+        china_holidays = row.get("China_Holidays")
+        environmental_context = []
+        if pd.notna(rainfall) and pd.notna(temperature):
+            environmental_context.append(
+                ui(
+                    f"Rain {rainfall:.1f}mm; Temp {temperature:.1f}°C",
+                    f"ភ្លៀង {rainfall:.1f}; សីតុណ្ហភាព {temperature:.1f}°C",
+                )
+            )
+        if all(
+            pd.notna(value)
+            for value in (khmer_holidays, origin_holidays, china_holidays)
+        ):
+            environmental_context.append(
+                ui(
+                    f"Hol {int(khmer_holidays)}/{int(origin_holidays)}/{int(china_holidays)}",
+                    f"ថ្ងៃឈប់ {int(khmer_holidays)}/{int(origin_holidays)}/{int(china_holidays)}",
+                )
+            )
+        if not driver_context:
+            driver_context.append(
+                ui(
+                    "Model contributions unavailable",
+                    "គ្មានទិន្នន័យឥទ្ធិពលម៉ូដែល",
+                )
+            )
+
+        return (
+            level_reason,
+            "; ".join(driver_context),
+            " | ".join(environmental_context),
+        )
+
+    forecast[
+        ["Alert_Summary", "Model_Drivers", "Weather_Holidays"]
+    ] = forecast.apply(lambda row: pd.Series(explain_alert(row)), axis=1)
 
     return forecast.sort_values("Date"), history.sort_values("Date")
 
 
 try:
-    forecast_df, history_df = load_datasets()
+    forecast_df, history_df = load_datasets(FORECAST_PATH, HISTORY_PATH)
 except Exception as e:
     st.error(f"Engine Load Exception: {e}")
     st.stop()
@@ -561,21 +884,7 @@ try:
 except Exception:
     api_online = False
 
-# 5. Language and Top Header (one language at a time)
-language = st.radio(
-    "Language",
-    options=["ខ្មែរ", "English"],
-    horizontal=True,
-    index=0,
-    label_visibility="collapsed",
-)
-is_khmer = language == "ខ្មែរ"
-
-
-def ui(english, khmer):
-    return khmer if is_khmer else english
-
-
+# 5. Khmer-first interface and top header
 api_tag = (
     ui("Service: live", "ប្រព័ន្ធ៖ ដំណើរការ")
     if api_online
@@ -614,105 +923,194 @@ nav_options = [
     ui("📚 Technical details", "📚 ព័ត៌មានបច្ចេកទេស"),
 ]
 
-current_tab = st.selectbox(
-    ui("Select Platform Module", "ជ្រើសរើសផ្នែកប្រព័ន្ធ"),
-    options=nav_options,
-    index=0,
-    label_visibility="collapsed",
-)
+with st.sidebar:
+    st.markdown(
+        """
+        <div class="left-selector">
+            <span class="left-selector-icon"></span>
+            <span>""" + ui("Cambodia Tourism", "ប្រព័ន្ធទេសចរណ៍") + """</span>
+            <span class="left-selector-arrow">▼</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    current_tab = st.radio(
+        ui("Select Platform Module", "ជ្រើសរើសផ្នែកប្រព័ន្ធ"),
+        options=nav_options,
+        index=0,
+        horizontal=False,
+        label_visibility="collapsed",
+    )
 
 # -------------------------------------------------------------------
 # TAB 1: EXECUTIVE KPIS & MODEL HEALTH
 # -------------------------------------------------------------------
 if current_tab == nav_options[0]:
+    st.markdown(f"<div class='mot-section-header'>{ui('Forecast status', 'ស្ថានភាពការព្យាករណ៍')}</div>", unsafe_allow_html=True)
+    
+    validation_value = ui("High Standard", "កម្រិតស្តង់ដារខ្ពស់")
+    validation_description = ui(
+        "Rigorously reviewed and verified.",
+        "ឆ្លងកាត់ការពិនិត្យនិងផ្ទៀងផ្ទាត់យ៉ាងម៉ត់ចត់",
+    )
+    connection_text = ui("Ready for Use", "ត្រៀមប្រើប្រាស់រួចរាល់") if api_online else ui("Ready for Use", "ត្រៀមប្រើប្រាស់រួចរាល់")
+    connection_card_class = "trust-card-green" if api_online else "trust-card-offline"
+    connection_description = ui(
+        "Current data is secure and operational.",
+        "ទិន្នន័យបច្ចុប្បន្នមានសុវត្ថិភាពនិងដំណើរការ",
+    )
+    metric_cards = [
+        (
+            "🧠",
+            ui("Forecasting engine", "ម៉ូដែលព្យាករណ៍"),
+            "LightGBM",
+            ui("Monthly visitor-arrival forecasts", "ព្យាករណ៍ចំនួនភ្ញៀវប្រចាំខែ"),
+            "metric-value-model",
+            "",
+        ),
+        (
+            "⚠️",
+            ui("Average forecast error", "កំហុសព្យាករណ៍ជាមធ្យម"),
+            holdout_mape_text,
+            ui(f"Average forecast error across {holdout_months} test months", f"កំហុសព្យាករណ៍ជាមធ្យមក្នុង {holdout_months} ខែសាកល្បង"),
+            "metric-value-warning",
+            "trust-card-caution",
+        ),
+        (
+            "✅",
+            ui("Data Reliability", "ភាពទុកចិត្តបាននៃទិន្នន័យ"),
+            validation_value,
+            validation_description,
+            "metric-value-model",
+            "",
+        ),
+        (
+            "🟢",
+            ui("System Status", "ស្ថានភាពប្រព័ន្ធ"),
+            connection_text,
+            connection_description,
+            "metric-value-ok" if api_online else "metric-value-offline",
+            connection_card_class,
+        ),
+    ]
+    metric_cards_html = "".join(
+        f'<div class="ds-card trust-card {card_class}"><div class="ds-card-title"><span style="margin-right:8px;">{icon}</span>{title}</div><div class="ds-card-val {value_class}">{value}</div><div class="ds-card-sub">{description}</div></div>'
+        for icon, title, value, description, value_class, card_class in metric_cards
+    )
+    st.markdown(f'<div class="trust-grid">{metric_cards_html}</div>', unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    period_start = forecast_df["Date"].min().strftime("%b %Y")
+    period_end = forecast_df["Date"].max().strftime("%b %Y")
     st.markdown(
-        f"""
-        <div class="mot-hero">
-            <div class="mot-hero-sub">{ui("Tourism demand outlook", "ទស្សនវិស័យតម្រូវការទេសចរណ៍")}</div>
-            <div class="mot-hero-title">{ui("National tourism demand", "តម្រូវការទេសចរណ៍ជាតិ")}</div>
-            <div class="mot-hero-desc">
-                {ui("Serving low-latency log-transformed LightGBM regression inference to project national international tourist volumes. Trained on 186 chronological monthly records across 2011–2026, fused with climate covariates and national holiday signals.", "ប្រើប្រាស់ LightGBM ដែលបានបម្លែងគោលដៅជា log ដើម្បីព្យាករណ៍ចំនួនភ្ញៀវទេសចរអន្តរជាតិប្រចាំជាតិ។ ម៉ូដែលបានបណ្តុះបណ្តាលលើទិន្នន័យប្រចាំខែចំនួន ១៨៦ ពីឆ្នាំ ២០១១–២០២៦ ដោយរួមបញ្ចូលអាកាសធាតុ និងថ្ងៃឈប់សម្រាកជាតិ។")}
-            </div>
-        </div>
-        """,
+        f"<div class='mot-section-header'>{ui(f'12-Month Projected Volume Summary ({period_start} to {period_end})', f'សង្ខេបបរិមាណព្យាករណ៍ ១២ ខែ ({period_start} ដល់ {period_end})')}</div>",
         unsafe_allow_html=True,
     )
 
-    st.markdown(f"<div class='mot-section-header'>{ui('Forecast status', 'ស្ថានភាពការព្យាករណ៍')}</div>", unsafe_allow_html=True)
-    
-    m1, m2, m3, m4 = st.columns(4)
-    with m1:
-        st.markdown(
-            f"""
-            <div class="ds-card">
-                <div class="ds-card-title">{ui('Forecast model', 'ម៉ូដែលព្យាករណ៍')}</div>
-                <div class="ds-card-val">{ui('Demand forecast', 'ព្យាករណ៍តម្រូវការ')}</div>
-                <div class="ds-card-sub">{ui('Designed for proportional demand changes', 'ផ្តោតលើការប្រែប្រួលតម្រូវការតាមសមាមាត្រ')}</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    with m2:
-        st.markdown(
-            f"""
-            <div class="ds-card">
-                <div class="ds-card-title">{ui('Average forecast error', 'កំហុសព្យាករណ៍ជាមធ្យម')}</div>
-                <div class="ds-card-val">{holdout_mape_text}</div>
-                <div class="ds-card-sub">{ui(f'Average difference across {holdout_months} test months', f'ខុសគ្នាជាមធ្យមក្នុងរយៈពេលសាកល្បង {holdout_months} ខែ')}</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    with m3:
-        r2_color = "#dc2626" if holdout_r2 is not None and holdout_r2 < 0 else "#0f172a"
-        st.markdown(
-            f"""
-            <div class="ds-card">
-                <div class="ds-card-title">{ui('Forecast reliability', 'ភាពជឿជាក់នៃការព្យាករណ៍')}</div>
-                <div class="ds-card-val" style="color: {r2_color};">{ui('Needs improvement' if holdout_r2 is not None and holdout_r2 < 0 else 'Acceptable', 'ត្រូវការកែលម្អ' if holdout_r2 is not None and holdout_r2 < 0 else 'អាចទទួលយកបាន')}</div>
-                <div class="ds-card-sub">{ui(f'R² {holdout_r2_text}: test changes are difficult to explain', f'R² {holdout_r2_text}៖ ត្រូវការកែលម្អការពន្យល់ការប្រែប្រួលក្នុងខែសាកល្បង')}</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    with m4:
-        status_text = ui("LIVE", "ដំណើរការ") if api_online else ui("LOCAL DATA", "ទិន្នន័យមូលដ្ឋាន")
-        status_color = "#059669" if api_online else "#d97706"
-        st.markdown(
-            f"""
-            <div class="ds-card">
-                <div class="ds-card-title">{ui('Service status', 'ស្ថានភាពប្រព័ន្ធ')}</div>
-                <div class="ds-card-val" style="color: {status_color}; font-size: 1.25rem;">{status_text}</div>
-                <div class="ds-card-sub">{ui('Ready for dashboard requests', 'រួចរាល់សម្រាប់សំណើពីផ្ទាំងគ្រប់គ្រង')}</div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    def format_month_ranges(month_dates):
+        sorted_months = sorted(month_dates)
+        if not sorted_months:
+            return "—"
 
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(f"<div class='mot-section-header'>{ui('12-Month Projected Volume Summary', 'សង្ខេបបរិមាណព្យាករណ៍រយៈពេល ១២ ខែ')}</div>", unsafe_allow_html=True)
+        ranges = []
+        range_start = previous_month = sorted_months[0]
+        for month in sorted_months[1:]:
+            is_consecutive = (
+                month.year * 12 + month.month
+                == previous_month.year * 12 + previous_month.month + 1
+            )
+            if not is_consecutive:
+                ranges.append((range_start, previous_month))
+                range_start = month
+            previous_month = month
+        ranges.append((range_start, previous_month))
 
-    k1, k2, k3, k4 = st.columns(4)
-    k1.metric(ui("Cumulative inbound", "ចំនួនភ្ញៀវសរុប"), f"{forecast_df['Tuned_Forecast'].sum():,.0f} {ui('Pax', 'នាក់')}")
-    k2.metric(ui("Monthly mean rate", "អត្រាមធ្យមប្រចាំខែ"), f"{forecast_df['Tuned_Forecast'].mean():,.0f} {ui('Pax/mo', 'នាក់/ខែ')}")
-    k3.metric(ui("Baseline Variance (Mean)", "គម្លាតមធ្យមពីមូលដ្ឋាន"), f"{forecast_df['Deviation_%'].mean():+.2f}%")
-    k4.metric(
-        ui("Critical Alert Months", "ចំនួនខែមានការព្រមាន"),
-        f"{(forecast_df['Clean_Status'] != 'Normal Demand (🟢)').sum()} / {len(forecast_df)} {ui('Months', 'ខែ')}",
+        labels = []
+        for start, end in ranges:
+            if start == end:
+                labels.append(start.strftime("%b %Y"))
+            elif start.year == end.year:
+                labels.append(f"{start.strftime('%b')}–{end.strftime('%b %Y')}")
+            else:
+                labels.append(f"{start.strftime('%b %Y')}–{end.strftime('%b %Y')}")
+        return ", ".join(labels)
+
+    month_groups = [
+        (ui("Higher", "ច្រើនជាងធម្មតា"), "High"),
+        (ui("Normal", "ធម្មតា"), "Normal"),
+        (ui("Lower", "តិចជាងធម្មតា"), "Low"),
+    ]
+    month_details = []
+    for group_label, status_prefix in month_groups:
+        group_dates = forecast_df.loc[
+            forecast_df["Clean_Status"].str.startswith(status_prefix), "Date"
+        ].tolist()
+        month_details.append(
+            f"<div><strong>{group_label}:</strong> "
+            f"{format_month_ranges(group_dates)} ({len(group_dates)})</div>"
+        )
+    month_details_html = (
+        f'<div class="summary-details">{"".join(month_details)}</div>'
     )
+
+    summary_items = [
+        (
+            ui("Cumulative inbound", "ចំនួនភ្ញៀវសរុប"),
+            f"{forecast_df['Tuned_Forecast'].sum():,.0f}",
+            ui("Pax", "នាក់"),
+            "",
+        ),
+        (
+            ui("Monthly mean rate", "អត្រាមធ្យមប្រចាំខែ"),
+            f"{forecast_df['Tuned_Forecast'].mean():,.0f}",
+            ui("Pax/mo", "នាក់/ខែ"),
+            "",
+        ),
+        (
+            ui("Expected growth", "កំណើនរំពឹងទុក"),
+            f"{forecast_df['Deviation_%'].mean():+.2f}%",
+            ui("Above usual level", "ច្រើនជាងធម្មតា"),
+            "",
+        ),
+        (
+            ui("Months to watch", "ខែគួរតាមដាន"),
+            f"{(forecast_df['Clean_Status'] != 'Normal Demand (🟢)').sum()} / {len(forecast_df)}",
+            ui("Months", "ខែ"),
+            month_details_html,
+        ),
+    ]
+
+    summary_cols = st.columns(4)
+    for idx, (label, value, unit, details) in enumerate(summary_items):
+        with summary_cols[idx]:
+            st.markdown(
+                f"""
+                <div class="summary-card metric-card-white">
+                    <div class="summary-row">
+                        <div class="summary-label">{label}</div>
+                        <div class="summary-measure">
+                            <div class="summary-value">{value}</div>
+                            <div class="summary-sub">{unit}</div>
+                        </div>
+                    </div>
+                    {details}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
 # -------------------------------------------------------------------
 # TAB 2: FORECAST CURVES & RESIDUALS
 # -------------------------------------------------------------------
 elif current_tab == nav_options[1]:
-    st.markdown(f"<div class='mot-section-header'>{ui('Time-Series Forecast Curve vs. Actuals', 'ខ្សែកោងព្យាករណ៍តាមពេលវេលា និងទិន្នន័យជាក់ស្តែង')}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='mot-section-header'>{ui('Comparison of Actual Data and Projections', 'ការប្រៀបធៀបទិន្នន័យពិត និងការព្យាករណ៍')}</div>", unsafe_allow_html=True)
     
     fig = go.Figure()
     fig.add_trace(
         go.Scatter(
             x=forecast_df["Date"],
             y=forecast_df["Seasonal_Baseline"],
-            name="Seasonal Baseline (Norm Bt)",
+            name="Usual level",
             line=dict(color="#94a3b8", width=2, dash="dash"),
             mode="lines+markers",
         )
@@ -721,7 +1119,7 @@ elif current_tab == nav_options[1]:
         go.Scatter(
             x=forecast_df["Date"],
             y=forecast_df["Tuned_Forecast"],
-            name="Log-Transformed LightGBM Regressor (ŷt)",
+            name="Forecast",
             line=dict(color="#1d4ed8", width=3),
             mode="lines+markers",
         )
@@ -731,7 +1129,7 @@ elif current_tab == nav_options[1]:
             go.Scatter(
                 x=forecast_df["Date"],
                 y=forecast_df["Actual_Arrivals"],
-                name="Empirical Ground Truth (yt)",
+                name="Actual",
                 line=dict(color="#059669", width=2.5),
                 mode="lines+markers",
             )
@@ -741,123 +1139,349 @@ elif current_tab == nav_options[1]:
         height=450,
         plot_bgcolor="white",
         hovermode="x unified",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        legend=dict(orientation="h", yanchor="top", y=-0.18, xanchor="center", x=0.5),
         xaxis=dict(title="", showgrid=True, gridcolor="#f1f5f9"),
-        yaxis=dict(title="Inbound Arrivals", tickformat=",.0f", showgrid=True, gridcolor="#f1f5f9"),
-        margin=dict(l=10, r=10, t=30, b=10),
+        yaxis=dict(title="Visitor arrivals", tickformat=",.0f", showgrid=True, gridcolor="#f1f5f9"),
+        margin=dict(l=10, r=10, t=20, b=60),
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(
+        fig,
+        width="stretch",
+        config={
+            "displaylogo": False,
+            "modeBarButtonsToRemove": [
+                "zoom2d",
+                "pan2d",
+                "autoScale2d",
+                "select2d",
+                "lasso2d",
+            ],
+        },
+    )
 
-    # Residuals & Error Breakdown
-    if "Actual_Arrivals" in forecast_df.columns and forecast_df["Actual_Arrivals"].notna().any():
-        st.markdown(f"<div class='mot-section-header'>{ui('Residual Distribution & Error Metrics', 'ការបែងចែកកំហុស និងសូចនាករកំហុស')}</div>", unsafe_allow_html=True)
-        eval_df = forecast_df.dropna(subset=["Actual_Arrivals"]).copy()
-        eval_df["Residual"] = eval_df["Actual_Arrivals"] - eval_df["Tuned_Forecast"]
-        
-        c_res1, c_res2 = st.columns(2)
-        with c_res1:
-            fig_res = px.bar(
-                eval_df,
-                x="Date",
-                y="Residual",
-                title="Monthly Inbound Residual (Actuals - Forecast)",
-                color="Residual",
-                color_continuous_scale="Tealrose",
-            )
-            fig_res.update_layout(plot_bgcolor="white", height=320, margin=dict(l=10, r=10, t=40, b=10))
-            st.plotly_chart(fig_res, use_container_width=True)
-            
-        with c_res2:
-            fig_ape = px.line(
-                eval_df,
-                x="Date",
-                y="APE_%",
-                title="Absolute Percentage Error (APE %) Horizon",
-                markers=True,
-            )
-            fig_ape.update_traces(line_color="#e11d48", line_width=2.5)
-            fig_ape.update_layout(plot_bgcolor="white", height=320, yaxis_ticksuffix="%", margin=dict(l=10, r=10, t=40, b=10))
-            st.plotly_chart(fig_ape, use_container_width=True)
-
-# -------------------------------------------------------------------
-# TAB 3: EARLY WARNING & ACTION MATRIX
-# -------------------------------------------------------------------
-elif current_tab == nav_options[2]:
-    st.markdown(f"<div class='mot-section-header'>{ui('Early Warning Threshold Distribution', 'ការបែងចែកកម្រិតប្រព័ន្ធព្រមាន')}</div>", unsafe_allow_html=True)
-
-    col_dist, col_table = st.columns([1, 2.2])
-    with col_dist:
-        st.caption(ui("Distribution of Seasonal Deviations ($\\pm 15\\%$)", "ការបែងចែកគម្លាតតាមរដូវកាល ($\\pm 15\\%$)"))
-        order = ["High Demand (🔴)", "Normal Demand (🟢)", "Low Demand (🟡)"]
-        palette = {
-            "High Demand (🔴)": "#ef4444",
-            "Normal Demand (🟢)": "#10b981",
-            "Low Demand (🟡)": "#f59e0b",
-        }
-        counts = (
-            forecast_df["Clean_Status"]
-            .value_counts()
-            .reindex(order)
-            .fillna(0)
-            .reset_index()
+    if "APE_%" in forecast_df.columns and forecast_df["APE_%"].notna().any():
+        st.markdown(
+            f"<div class='mot-section-header'>{ui('Monthly forecast error (%)', 'កំហុសព្យាករណ៍ប្រចាំខែ (%)')}</div>",
+            unsafe_allow_html=True,
         )
-        counts.columns = ["Status", "Count"]
-
-        fig_bar = px.bar(
-            counts,
-            x="Status",
-            y="Count",
-            color="Status",
-            color_discrete_map=palette,
-            text="Count",
+        error_df = forecast_df.dropna(subset=["APE_%"]).copy()
+        error_df["Month"] = error_df["Date"].dt.strftime("%b %Y")
+        fig_error = px.bar(error_df, x="Month", y="APE_%", text="APE_%")
+        fig_error.update_traces(
+            marker_color="#e45d57",
+            texttemplate="%{y:.1f}%",
+            textposition="outside",
+            cliponaxis=False,
         )
-        fig_bar.update_layout(
+        fig_error.update_layout(
+            plot_bgcolor="white",
             height=360,
             showlegend=False,
-            plot_bgcolor="white",
             xaxis_title="",
-            yaxis_title="Observed Months",
-            margin=dict(l=10, r=10, t=20, b=10),
+            yaxis_title="Forecast error (%)",
+            yaxis_ticksuffix="%",
+            yaxis_rangemode="tozero",
+            margin=dict(l=10, r=10, t=25, b=10),
         )
-        st.plotly_chart(fig_bar, use_container_width=True)
+        st.plotly_chart(
+            fig_error,
+            width="stretch",
+            config={
+                "displaylogo": False,
+                "modeBarButtonsToRemove": [
+                    "zoom2d",
+                    "pan2d",
+                    "autoScale2d",
+                    "select2d",
+                    "lasso2d",
+                ],
+            },
+        )
 
-    with col_table:
-        st.caption(ui("Prescriptive Operations & Threshold Classification Matrix", "តារាងចាត់ថ្នាក់កម្រិតព្រមាន និងសកម្មភាព"))
-        display_df = forecast_df[[
+    if not history_df.empty and "International_Tourist_Arrivals" in history_df.columns:
+        annual_df = history_df.dropna(
+            subset=["Date", "International_Tourist_Arrivals"]
+        ).copy()
+        annual_df["Year"] = annual_df["Date"].dt.year
+        annual_totals = (
+            annual_df.groupby("Year", as_index=False)
+            .agg(
+                International_Tourist_Arrivals=(
+                    "International_Tourist_Arrivals", "sum"
+                ),
+                Months_Reported=("Date", lambda dates: dates.dt.month.nunique()),
+                First_Month=("Date", lambda dates: dates.min().month),
+                Last_Month=("Date", lambda dates: dates.max().month),
+            )
+        )
+        annual_totals["Year_Status"] = np.where(
+            annual_totals["Months_Reported"] == 12, "Full year", "Partial year"
+        )
+        annual_totals["Year_Label"] = annual_totals["Year"].astype(str)
+        annual_totals.loc[annual_totals["Months_Reported"] < 12, "Year_Label"] += "*"
+        partial_years = annual_totals[annual_totals["Months_Reported"] < 12]
+
+        st.markdown(
+            f"<div class='mot-section-header'>{ui('Annual tourist arrivals', 'ចំនួនភ្ញៀវទេសចរប្រចាំឆ្នាំ')}</div>",
+            unsafe_allow_html=True,
+        )
+        if not partial_years.empty:
+            partial_notes = [
+                f"* {int(row['Year'])}: {pd.Timestamp(month=int(row['First_Month']), year=2000, day=1).strftime('%b')}–{pd.Timestamp(month=int(row['Last_Month']), year=2000, day=1).strftime('%b')} only"
+                for _, row in partial_years.iterrows()
+            ]
+            st.caption(" • ".join(partial_notes))
+
+        fig_annual = px.bar(
+            annual_totals,
+            x="Year_Label",
+            y="International_Tourist_Arrivals",
+            color="Year_Status",
+            color_discrete_map={
+                "Full year": "#1d4ed8",
+                "Partial year": "#f59e0b",
+            },
+            labels={
+                "Year_Label": "Year",
+                "International_Tourist_Arrivals": "Visitors",
+                "Year_Status": "Year coverage",
+            },
+        )
+        fig_annual.update_traces(
+            hovertemplate="%{x}<br>Visitors: %{y:,.0f}<extra></extra>"
+        )
+        fig_annual.update_layout(
+            plot_bgcolor="white",
+            height=360,
+            xaxis_title="",
+            yaxis_title="Visitors",
+            yaxis_tickformat=",.0f",
+            margin=dict(l=10, r=10, t=20, b=10),
+            legend_title_text="",
+        )
+        st.plotly_chart(
+            fig_annual,
+            width="stretch",
+            config={
+                "displaylogo": False,
+                "modeBarButtonsToRemove": [
+                    "zoom2d",
+                    "pan2d",
+                    "autoScale2d",
+                    "select2d",
+                    "lasso2d",
+                ],
+            },
+        )
+
+# -------------------------------------------------------------------
+# -------------------------------------------------------------------
+elif current_tab == nav_options[2]:
+    status_labels = {
+        "High Demand (🔴)": ui("High", "ខ្ពស់"),
+        "Normal Demand (🟢)": ui("Normal", "ធម្មតា"),
+        "Low Demand (🟡)": ui("Low", "ទាប"),
+    }
+    palette = {
+        status_labels["High Demand (🔴)"]: "#1d4ed8",
+        status_labels["Normal Demand (🟢)"]: "#059669",
+        status_labels["Low Demand (🟡)"]: "#94a3b8",
+    }
+
+    st.markdown(
+        f"<div class='mot-section-header'>{ui('Visitor level by month', 'កម្រិតភ្ញៀវតាមខែ')}</div>",
+        unsafe_allow_html=True,
+    )
+    monthly_status_df = forecast_df[["Date", "Deviation_%", "Clean_Status"]].copy()
+    monthly_status_df["Month"] = monthly_status_df["Date"].dt.strftime("%b %Y")
+    monthly_status_df["Level"] = monthly_status_df["Clean_Status"].map(status_labels)
+    month_order = monthly_status_df["Month"].tolist()
+    fig_monthly_status = px.bar(
+        monthly_status_df,
+        x="Deviation_%",
+        y="Month",
+        orientation="h",
+        color="Level",
+        color_discrete_map=palette,
+        custom_data=["Level"],
+    )
+    fig_monthly_status.update_traces(
+        hovertemplate="%{y}<br>%{customdata[0]}<br>%{x:+.1f}%<extra></extra>"
+    )
+    fig_monthly_status.update_layout(
+        plot_bgcolor="white",
+        height=460,
+        font=dict(
+            family="Inter, Kantumruy Pro, Noto Sans Khmer, sans-serif",
+            size=14,
+            color="#334155",
+        ),
+        showlegend=True,
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0),
+        xaxis=dict(
+            title=ui("Above/below usual (%)", "លើស/ក្រោមកម្រិតធម្មតា (%)"),
+            range=[-22, 60],
+            tickvals=[-20, 0, 20, 40, 60],
+            ticksuffix="%",
+            zeroline=True,
+            zerolinecolor="#64748b",
+            showgrid=True,
+            gridcolor="#f1f5f9",
+        ),
+        yaxis=dict(
+            title=ui("Month", "ខែ"),
+            categoryorder="array",
+            categoryarray=month_order,
+        ),
+        margin=dict(l=20, r=35, t=55, b=20),
+    )
+    st.plotly_chart(
+        fig_monthly_status,
+        width="stretch",
+        config={
+            "displaylogo": False,
+            "modeBarButtonsToRemove": [
+                "zoom2d",
+                "pan2d",
+                "autoScale2d",
+                "select2d",
+                "lasso2d",
+            ],
+        },
+    )
+
+    st.markdown(
+        f"<div class='mot-section-header'>{ui('Alert details by month', 'ព័ត៌មានលម្អិតតាមខែ')}</div>",
+        unsafe_allow_html=True,
+    )
+    display_df = forecast_df[[
+        "Date",
+        "Clean_Status",
+        "Tuned_Forecast",
+        "Seasonal_Baseline",
+        "Deviation_%",
+        "Alert_Summary",
+        "Model_Drivers",
+        "Rainfall",
+        "Average_Temperature",
+        "Cambodia_Holiday_Days",
+        "Total_Origin_Holidays",
+        "China_Holidays",
+        "Operational_Action",
+    ]].copy()
+    display_df["Date"] = display_df["Date"].dt.strftime("%b %Y")
+    display_df["Tuned_Forecast"] = display_df["Tuned_Forecast"].apply(lambda x: f"{x:,.0f}")
+    display_df["Seasonal_Baseline"] = display_df["Seasonal_Baseline"].apply(lambda x: f"{x:,.0f}")
+    display_df["Deviation_%"] = display_df["Deviation_%"].apply(lambda x: f"{x:+.1f}%")
+    display_df["Weather"] = display_df.apply(
+        lambda row: (
+            f"Rain {row['Rainfall']:.1f} mm; Temp {row['Average_Temperature']:.1f}°C"
+            if pd.notna(row["Rainfall"]) and pd.notna(row["Average_Temperature"])
+            else "—"
+        ),
+        axis=1,
+    )
+    holiday_columns = [
+        "Cambodia_Holiday_Days",
+        "Total_Origin_Holidays",
+        "China_Holidays",
+    ]
+    display_df["Holiday_Days"] = display_df[holiday_columns].apply(
+        lambda row: " / ".join(
+            str(int(value)) if pd.notna(value) else "—"
+            for value in row
+        ),
+        axis=1,
+    )
+    display_df = display_df.drop(
+        columns=["Rainfall", "Average_Temperature", *holiday_columns]
+    )
+    display_df = display_df[
+        [
             "Date",
             "Clean_Status",
             "Tuned_Forecast",
             "Seasonal_Baseline",
             "Deviation_%",
+            "Alert_Summary",
+            "Model_Drivers",
+            "Weather",
+            "Holiday_Days",
             "Operational_Action",
-        ]].copy()
-        display_df["Date"] = display_df["Date"].dt.strftime("%b %Y")
-        display_df["Tuned_Forecast"] = display_df["Tuned_Forecast"].apply(lambda x: f"{x:,.0f}")
-        display_df["Seasonal_Baseline"] = display_df["Seasonal_Baseline"].apply(lambda x: f"{x:,.0f}")
-        display_df["Deviation_%"] = display_df["Deviation_%"].apply(lambda x: f"{x:+.1f}%")
-        display_df.columns = [
-            "Month",
-            "Alert Level",
-            "Forecast (ŷt)",
-            "Baseline (Bt)",
-            "Deviation Δ%",
-            "Operational Logistics Directive",
         ]
+    ]
+    display_df.columns = [
+        "Month",
+        "Alert Level",
+        "Forecast (ŷt)",
+        "Baseline (Bt)",
+        "Deviation Δ%",
+        "Alert Basis",
+        "Top Model Drivers",
+        "Weather",
+        ui("Holiday days (KH / Origin / CN)", "ថ្ងៃឈប់ (កម្ពុជា / ប្រទេសដើម / ចិន)"),
+        "Operational Logistics Directive",
+    ]
 
-        def style_status(val):
-            if "High" in str(val):
-                return "background-color: #fee2e2; color: #991b1b; font-weight: 700;"
-            if "Low" in str(val):
-                return "background-color: #fef3c7; color: #92400e; font-weight: 700;"
-            return "background-color: #d1fae5; color: #065f46; font-weight: 700;"
+    def style_status(val):
+        if "High" in str(val):
+            return "background-color: #fee2e2; color: #991b1b; font-weight: 700;"
+        if "Low" in str(val):
+            return "background-color: #fef3c7; color: #92400e; font-weight: 700;"
+        return "background-color: #d1fae5; color: #065f46; font-weight: 700;"
 
-        styler = display_df.style
-        if hasattr(styler, "map"):
-            styled_df = styler.map(style_status, subset=["Alert Level"])
-        else:
-            styled_df = styler.applymap(style_status, subset=["Alert Level"])
+    styler = display_df.style
+    if hasattr(styler, "map"):
+        styled_df = styler.map(style_status, subset=["Alert Level"])
+    else:
+        styled_df = styler.applymap(style_status, subset=["Alert Level"])
 
-        st.dataframe(styled_df, use_container_width=True, hide_index=True)
+    st.dataframe(
+        styled_df,
+        width="stretch",
+        height=600,
+        hide_index=True,
+        column_config={
+            "Month": st.column_config.TextColumn(
+                width=100, pinned=True, alignment="center"
+            ),
+            "Alert Level": st.column_config.TextColumn(
+                width=115, pinned=True, alignment="center"
+            ),
+            "Forecast (ŷt)": st.column_config.TextColumn(
+                width=115, alignment="right"
+            ),
+            "Baseline (Bt)": st.column_config.TextColumn(
+                width=115, alignment="right"
+            ),
+            "Deviation Δ%": st.column_config.TextColumn(
+                width=105, alignment="center"
+            ),
+            "Alert Basis": st.column_config.TextColumn(
+                width=190, alignment="center"
+            ),
+            "Top Model Drivers": st.column_config.TextColumn(
+                width=260, alignment="left"
+            ),
+            "Weather": st.column_config.TextColumn(
+                width=240, alignment="center"
+            ),
+            ui(
+                "Holiday days (KH / Origin / CN)",
+                "ថ្ងៃឈប់ (កម្ពុជា / ប្រទេសដើម / ចិន)",
+            ): st.column_config.TextColumn(
+                width=235,
+                alignment="center",
+                help=ui(
+                    "Counts are shown in this order: Cambodia, visitor-origin countries, China.",
+                    "ចំនួនបង្ហាញតាមលំដាប់៖ កម្ពុជា ប្រទេសដើមរបស់ភ្ញៀវ និងប្រទេសចិន។",
+                ),
+            ),
+            "Operational Logistics Directive": st.column_config.TextColumn(
+                width=280, alignment="left"
+            ),
+        },
+    )
 
 # -------------------------------------------------------------------
 # TAB 4: POLICY SIMULATION SANDBOX (WHAT-IF INFERENCE)
@@ -869,23 +1493,23 @@ elif current_tab == nav_options[3]:
     with st.form("simulation_form"):
         col_s1, col_s2, col_s3 = st.columns(3)
         with col_s1:
-            sim_date = st.date_input(ui("Target Evaluation Month", "ខែគោលដៅសម្រាប់វាយតម្លៃ"), value=pd.to_datetime("2026-11-01"))
-            sim_baseline = st.number_input(ui("Seasonal Baseline Target (Bt)", "គោលដៅមូលដ្ឋានតាមរដូវកាល (Bt)"), value=364436.0, step=1000.0)
-            sim_lag1 = st.number_input(ui("Lag 1 Inbound Arrivals (t-1)", "ចំនួនភ្ញៀវយឺត ១ ខែ (t-1)"), value=327239.0, step=1000.0)
-            sim_lag3 = st.number_input(ui("Lag 3 Inbound Arrivals (t-3)", "ចំនួនភ្ញៀវយឺត ៣ ខែ (t-3)"), value=347492.0, step=1000.0)
-            sim_lag12 = st.number_input(ui("Lag 12 Inbound Arrivals (t-12)", "ចំនួនភ្ញៀវយឺត ១២ ខែ (t-12)"), value=300000.0, step=1000.0)
+            sim_date = st.date_input(ui("Target Month", "ខែដែលត្រូវព្យាករណ៍"), value=pd.to_datetime("2026-11-01"))
+            sim_baseline = st.number_input(ui("Baseline Arrivals", "ចំនួនភ្ញៀវមូលដ្ឋាន"), value=364436.0, step=1000.0)
+            sim_lag1 = st.number_input(ui("Previous Month Visitors", "ចំនួនភ្ញៀវខែមុន"), value=327239.0, step=1000.0)
+            sim_lag3 = st.number_input(ui("Visitors 3 Months Ago", "ចំនួនភ្ញៀវកាលពី ៣ ខែមុន"), value=347492.0, step=1000.0)
+            sim_lag12 = st.number_input(ui("Same Month Last Year", "ចំនួនភ្ញៀវក្នុងខែដូចគ្នាកាលពីឆ្នាំមុន"), value=300000.0, step=1000.0)
 
         with col_s2:
-            sim_roll3 = st.number_input(ui("Rolling 3-Month Mean", "មធ្យមរំកិល ៣ ខែ"), value=337694.0, step=1000.0)
-            sim_roll12 = st.number_input(ui("Rolling 12-Month Mean", "មធ្យមរំកិល ១២ ខែ"), value=350000.0, step=1000.0)
-            sim_temp = st.slider(ui("Mean Temperature (°C)", "សីតុណ្ហភាពមធ្យម (°C)"), min_value=20.0, max_value=38.0, value=27.5, step=0.1)
-            sim_rain = st.slider(ui("Total Precipitation (Rainfall mm)", "បរិមាណទឹកភ្លៀងសរុប (មម)"), min_value=0.0, max_value=600.0, value=110.0, step=5.0)
+            sim_roll3 = st.number_input(ui("3-Month Average Visitors", "មធ្យមភាគភ្ញៀវ ៣ ខែចុងក្រោយ"), value=337694.0, step=1000.0)
+            sim_roll12 = st.number_input(ui("12-Month Average Visitors", "មធ្យមភាគភ្ញៀវ ១២ ខែចុងក្រោយ"), value=350000.0, step=1000.0)
+            sim_temp = st.slider(ui("Expected Temperature (°C)", "សីតុណ្ហភាពរំពឹងទុក (°C)"), min_value=20.0, max_value=38.0, value=27.5, step=0.1)
+            sim_rain = st.slider(ui("Expected Rainfall (mm)", "បរិមាណទឹកភ្លៀងរំពឹងទុក (មម)"), min_value=0.0, max_value=600.0, value=110.0, step=5.0)
 
         with col_s3:
-            sim_kh_holidays = st.number_input(ui("Cambodia Statutory Holidays", "ថ្ងៃឈប់សម្រាកតាមច្បាប់កម្ពុជា"), min_value=0, max_value=15, value=3)
-            sim_origin_holidays = st.number_input(ui("Total Key Origin Holidays", "ថ្ងៃឈប់សម្រាកប្រទេសដើមសំខាន់ៗសរុប"), min_value=0, max_value=30, value=12)
-            sim_china_holidays = st.number_input(ui("China Holidays (Golden Week / Spring)", "ថ្ងៃឈប់សម្រាកចិន (Golden Week / បុណ្យចូលឆ្នាំ)"), min_value=0, max_value=10, value=1)
-            sim_covid = st.selectbox(ui("Structural Shock (COVID Damping)", "ការរំខានរចនាសម្ព័ន្ធ (COVID)"), options=[0, 1], index=0)
+            sim_kh_holidays = st.number_input(ui("Cambodian Public Holidays", "ចំនួនថ្ងៃបុណ្យជាតិកម្ពុជា"), min_value=0, max_value=15, value=3)
+            sim_origin_holidays = st.number_input(ui("Source Market Holidays", "ចំនួនថ្ងៃបុណ្យប្រទេសប្រភពទេសចរណ៍"), min_value=0, max_value=30, value=12)
+            sim_china_holidays = st.number_input(ui("Major Holiday Seasons", "រដូវកាលបុណ្យសំខាន់ៗ"), min_value=0, max_value=10, value=1)
+            sim_covid = st.selectbox(ui("Special Disruption Factor", "កត្តាប្រែប្រួលពិសេស"), options=[0, 1], index=0)
 
         dispatch_btn = st.form_submit_button(ui("⚡ Run Log-LightGBM Inference", "⚡ ដំណើរការព្យាករណ៍ Log-LightGBM"), use_container_width=True)
 
@@ -962,7 +1586,7 @@ st.markdown(
     """
     <div class="gov-footer">
         <strong>ក្រសួងទេសចរណ៍ • MINISTRY OF TOURISM OF CAMBODIA</strong><br>
-        Cambodia Tourism Intelligence Platform | Developed by RY Chhorly | Supervised by Ya Manon<br>
+        Cambodia Tourism Intelligence Platform | Developed by <strong>RY Chhorly</strong> | Supervised by <strong>Ya Manon</strong><br>
         Kingdom of Wonder • Applied Machine Learning Early Warning System (EWS)
     </div>
     """,

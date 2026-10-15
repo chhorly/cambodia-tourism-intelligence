@@ -48,7 +48,13 @@ def load_to_postgres():
     forecast_file = data_dir / "Cambodia_Tourism_Forecast_EWS.csv"
     
     if not forecast_file.exists():
-        raise FileNotFoundError(f"Forecast file not found at {forecast_file}")
+        forecast_candidates = sorted(
+            data_dir.glob("Cambodia_Tourism_Forecast_EWS*.csv")
+        )
+        if forecast_candidates:
+            forecast_file = forecast_candidates[0]
+        else:
+            raise FileNotFoundError(f"Forecast file not found in {data_dir}")
 
     df = pd.read_csv(forecast_file)
     df.columns = [c.strip().replace(" ", "_").replace("%", "pct").lower() for c in df.columns]
