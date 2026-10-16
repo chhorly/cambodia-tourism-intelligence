@@ -6,10 +6,10 @@ from airflow.operators.python import PythonOperator
 import pandas as pd
 from sqlalchemy import create_engine
 
-# Database Connection URI (Docker Postgres)
+# Database Connection URI (Docker Postgres - Direct Corrected)
 DB_URI = os.getenv(
     "DATABASE_URL", 
-    "postgresql://postgres:postgres@localhost:5432/tourism_db"
+    "postgresql://airflow:airflow@postgres:5432/tourism_db"
 )
 
 default_args = {
