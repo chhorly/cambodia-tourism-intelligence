@@ -1,4 +1,10 @@
 from pathlib import Path
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 import joblib
 import numpy as np
 import pandas as pd
@@ -9,6 +15,7 @@ import streamlit as st
 from sklearn.base import clone
 
 from model_training import prepare_training_data
+
 from app.scenario_transactions import (
     SCENARIO_TRANSACTIONS_PATH,
     append_scenario_transaction,
